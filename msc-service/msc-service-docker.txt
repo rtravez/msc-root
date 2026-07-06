@@ -1,0 +1,14 @@
+docker build -t msc-service:latest .
+docker network create cloud-sofka
+docker images
+docker image ls
+docker run -P --name msc-service --network cloud-sofka msc-service:latest
+docker run --name msc-service --network cloud-sofka -p 8080:8080 msc-service:latest
+docker container ls
+docker container --help
+docker ps
+docker ps -a
+docker logs -f msc-service
+
+docker tag msc-service:latest rtravez/msc-service:latest
+docker push rtravez/msc-service:latest
