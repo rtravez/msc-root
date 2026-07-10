@@ -24,26 +24,14 @@ public class ValidationController {
 
 	@GetMapping(path = "identification/{identification}")
 	public ResponseEntity<BaseResponseDto<Object>> validationIdentification(@PathVariable String identification) {
-		try {
-			return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value())
-					.data(service.validationIdentification(identification)).message("Identificación validada con \u00E9xito").build());
-		} catch (ExceptionManager e) {
-			log.error("validationIdentification", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(BaseResponseDto.builder().message(e.getMessage()).code(HttpStatus.INTERNAL_SERVER_ERROR.value()).build());
-		}
+		return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value())
+				.data(service.validationIdentification(identification)).message("Identificación validada con \u00E9xito").build());
 	}
 
 	@GetMapping(path = "ruc/{ruc}")
 	public ResponseEntity<BaseResponseDto<Object>> validationRuc(@PathVariable String ruc) {
-		try {
-			return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(service.validationRuc(ruc))
-					.message("Ruc validado con \u00E9xito").build());
-		} catch (ExceptionManager e) {
-			log.error("validationRuc", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(BaseResponseDto.builder().message(e.getMessage()).code(HttpStatus.INTERNAL_SERVER_ERROR.value()).build());
-		}
+		return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(service.validationRuc(ruc))
+				.message("Ruc validado con \u00E9xito").build());
 	}
 
 }

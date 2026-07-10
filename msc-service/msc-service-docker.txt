@@ -10,5 +10,17 @@ docker ps
 docker ps -a
 docker logs -f msc-service
 
+// docker hub
 docker tag msc-service:latest rtravez/msc-service:latest
 docker push rtravez/msc-service:latest
+
+
+// docker
+docker-compose up -d
+
+//restaurar base de datos
+
+--/usr/lib/postgresql/16/bin$
+
+psql -h localhost -p 5432 -U postgres -d db_test -v --clean -f /run/media/rtravez/mydata/Personal/workspaceSofka/msc-root/BaseDatos.sql
+pg_restore -h localhost -p 5432 -U postgres -d db_test -v --clean /run/media/rtravez/mydata/Personal/workspaceSofka/msc-root/BaseDatos.sql 

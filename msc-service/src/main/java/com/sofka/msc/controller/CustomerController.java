@@ -47,18 +47,13 @@ public class CustomerController {
     @GetMapping
     @Operation(summary = "Find Customer")
     public ResponseEntity<BaseResponseDto<Object>> findCustomerAll() {
-        try {
-            List<CustomerResponse> customerResponses = customerService.findCustomerAll();
-            if (customerResponses.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("No existen clientes").build());
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value())
-                    .data(customerResponses).message("Clientes encontrados con \u00E9xito").build());
-        } catch (ExceptionManager e) {
-            log.error("findCustomerAll", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponseDto.builder().message(e.getMessage()).code(HttpStatus.INTERNAL_SERVER_ERROR.value()).build());
+        List<CustomerResponse> customerResponses = customerService.findCustomerAll();
+        if (customerResponses.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("No existen clientes").build());
         }
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value())
+                .data(customerResponses).message("Clientes encontrados con \u00E9xito").build());
     }
 
     /**
@@ -70,12 +65,7 @@ public class CustomerController {
     @PostMapping(path = "findCustomerByIdentification")
     @Operation(summary = "Find customer by identification")
     public ResponseEntity<CustomerResponse> findCustomerByIdentification(@RequestBody CustomerRequest request) {
-        try {
-            return ResponseEntity.ok(this.customerService.findCustomerByIdentification(request));
-        } catch (ExceptionManager e) {
-            log.error("findCustomerByIdentification", e);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(this.customerService.findCustomerByIdentification(request));
     }
 
     /**
@@ -88,17 +78,12 @@ public class CustomerController {
     @PostMapping
     @Operation(summary = "Create Customer")
     public ResponseEntity<BaseResponseDto<Object>> save(@Valid @RequestBody CustomerRequest request) {
-        try {
-            if (Boolean.TRUE.equals(this.personService.exist(request.getIdentification()))) {
-                return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("El cliente ya existe").build());
-            }
-
-            CustomerResponse response = customerService.processSaveCustomer(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDto.builder().code(HttpStatus.CREATED.value()).data(response).message("Cliente creado con \u00E9xito").build());
-        } catch (ExceptionManager e) {
-            log.error("save: {0}", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponseDto.builder().message(e.getMessage()).code(HttpStatus.INTERNAL_SERVER_ERROR.value()).build());
+        if (Boolean.TRUE.equals(this.personService.exist(request.getIdentification()))) {
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("El cliente ya existe").build());
         }
+
+        CustomerResponse response = customerService.processSaveCustomer(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDto.builder().code(HttpStatus.CREATED.value()).data(response).message("Cliente creado con \u00E9xito").build());
     }
 
     /**
@@ -111,17 +96,12 @@ public class CustomerController {
     @PutMapping
     @Operation(summary = "Update Customer")
     public ResponseEntity<BaseResponseDto<Object>> update(@Valid @RequestBody CustomerRequest request) {
-        try {
-            CustomerResponse response = customerService.processUpdateCustomer(request);
-            if (response == null) {
-                return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("El cliente no existe").build());
-            }
-
-            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(response).message("Cliente actualizado con \u00E9xito").build());
-        } catch (ExceptionManager e) {
-            log.error("update: {0}", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponseDto.builder().message(e.getMessage()).code(HttpStatus.INTERNAL_SERVER_ERROR.value()).build());
+        CustomerResponse response = customerService.processUpdateCustomer(request);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("El cliente no existe").build());
         }
+
+        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(response).message("Cliente actualizado con \u00E9xito").build());
     }
 
     /**
@@ -134,15 +114,10 @@ public class CustomerController {
     @DeleteMapping(path = "/{id}")
     @Operation(summary = "Delete Customer")
     public ResponseEntity<BaseResponseDto<Object>> deleteById(@PathVariable Long id) {
-        try {
-            if (this.customerService.deleteCustomerById(id) >= 1) {
-                return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("Cliente eliminado con \u00E9xito").build());
-            } else {
-                return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("El cliente no existe").build());
-            }
-        } catch (ExceptionManager e) {
-            log.error("deleteById", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(BaseResponseDto.builder().message(e.getMessage()).code(HttpStatus.INTERNAL_SERVER_ERROR.value()).build());
+        if (this.customerService.deleteCustomerById(id) >= 1) {
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("Cliente eliminado con \u00E9xito").build());
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("El cliente no existe").build());
         }
     }
 }
