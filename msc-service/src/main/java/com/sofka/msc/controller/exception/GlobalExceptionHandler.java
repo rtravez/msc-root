@@ -1,19 +1,19 @@
-package com.sofka.msc.controller.advice;
+package com.sofka.msc.controller.exception;
 
 import com.sofka.msc.dto.BaseResponseDto;
 import com.sofka.msc.exception.ExceptionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
 import java.util.List;
-import java.util.stream.Collectors;
 
-@ControllerAdvice
+@RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
 
@@ -42,8 +42,7 @@ public class GlobalExceptionHandler {
         List<String> errors = ex.getBindingResult()
                 .getFieldErrors()
                 .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage())
-                .collect(Collectors.toList());
+                .map(error -> error.getField() + ": " + error.getDefaultMessage()).toList();
 
         BaseResponseDto<Object> response = BaseResponseDto.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
@@ -58,8 +57,7 @@ public class GlobalExceptionHandler {
         log.error("Constraint violation error: ", ex);
         List<String> errors = ex.getConstraintViolations()
                 .stream()
-                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
-                .collect(Collectors.toList());
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage()).toList();
 
         BaseResponseDto<Object> response = BaseResponseDto.builder()
                 .code(HttpStatus.BAD_REQUEST.value())
@@ -77,5 +75,17 @@ public class GlobalExceptionHandler {
                 .message("Ocurrió un error interno en el servidor")
                 .build();
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<BaseResponseDto<Object>> handleAccessDeniedException(AccessDeniedException ex) {
+        log.warn("Access denied: {}", ex.getMessage());
+
+        BaseResponseDto<Object> response = BaseResponseDto.builder()
+                .code(HttpStatus.FORBIDDEN.value())
+                .message("No tienes permisos para realizar esta operación")
+                .build();
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 }
