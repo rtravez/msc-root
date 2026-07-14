@@ -1,7 +1,6 @@
 package com.sofka.msc.controller.common;
 
 import com.sofka.msc.dto.BaseResponseDto;
-import com.sofka.msc.exception.ExceptionManager;
 import com.sofka.msc.service.common.IValidationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

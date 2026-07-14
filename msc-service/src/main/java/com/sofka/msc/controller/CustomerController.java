@@ -3,7 +3,6 @@ package com.sofka.msc.controller;
 import com.sofka.msc.dto.BaseResponseDto;
 import com.sofka.msc.dto.request.CustomerRequest;
 import com.sofka.msc.dto.response.CustomerResponse;
-import com.sofka.msc.exception.ExceptionManager;
 import com.sofka.msc.service.ICustomerService;
 import com.sofka.msc.service.IPersonService;
 import io.swagger.v3.oas.annotations.Operation;
