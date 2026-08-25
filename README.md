@@ -12,7 +12,7 @@ Sí prefiere cambiar las configuraciones en el archivo `application.properties `
 ## Development server
 Ejecutar `java -jar msc-service-0.0.1-SNAPSHOT.jar` por defecto `http://localhost:8080/mscServices`.
 
-Los datos de inicio de sesión para oauth: `http://localhost:8080/mscServices/oauth/token`
+Los datos de inicio de sesión para oauth2: `http://localhost:8080/mscServices/oauth2/token`
 Usuario: **admin**
 Contraseña: **12345**
 #
@@ -99,7 +99,7 @@ El archivo usa volúmenes Docker para conservar los datos de PostgreSQL y los ar
 Una vez levantado el entorno:
 
 - PostgreSQL: `localhost:5432`
-- OAuth token: `http://localhost:8080/mscServices/oauth/token`
+- OAuth2 token: `http://localhost:8080/mscServices/oauth2/token`
 - `msc-service`: `http://localhost:8080/mscServices`
 - `msa-service`: `http://localhost:1987/msaServices`
 
