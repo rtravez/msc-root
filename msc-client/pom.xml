@@ -28,12 +28,16 @@
 		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-apt</artifactId>
+			<version>5.1.0</version>
+			<classifier>jakarta</classifier>
 			<scope>provided</scope>
 		</dependency>
 
 		<dependency>
 			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
+			<version>5.1.0</version>
+			<classifier>jakarta</classifier>
 		</dependency>
 		
 		 <dependency>
@@ -65,12 +69,6 @@
 							<version>${org.mapstruct.version}</version>
 						</path>						
 					</annotationProcessorPaths>
-					<compilerArgs>
-						<arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
-						<arg>-Amapstruct.defaultComponentModel=spring</arg>
-						<!-- <arg>-Amapstruct.suppressGeneratorVersionInfoComment=true</arg> -->
-						<!-- <arg>-Amapstruct.verbose=true</arg> -->
-					</compilerArgs>
 				</configuration>
 			</plugin>
 

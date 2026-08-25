@@ -4,7 +4,7 @@ import com.sofka.msc.dto.BaseDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
