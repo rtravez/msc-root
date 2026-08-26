@@ -1,6 +1,6 @@
-package com.sofka.msc.service;
+package com.rtravez.msc.service;
 
-import com.sofka.msc.exception.ExceptionManager;
+import com.rtravez.msc.exception.ExceptionManager;
 
 import java.io.Serializable;
 import java.util.List;

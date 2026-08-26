@@ -1,4 +1,4 @@
-package com.sofka.msc.repository;
+package com.rtravez.msc.repository;
 
 import org.springframework.data.repository.NoRepositoryBean;
 

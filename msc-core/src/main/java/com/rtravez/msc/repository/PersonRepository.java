@@ -1,16 +1,15 @@
-package com.sofka.msc.repository;
+package com.rtravez.msc.repository;
 
-import com.sofka.msc.entity.PersonEntity;
-import com.sofka.msc.exception.ExceptionManager;
+import com.rtravez.msc.entity.PersonEntity;
+import com.rtravez.msc.exception.ExceptionManager;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
-import static com.sofka.msc.entity.QCustomerEntity.customerEntity;
-import static com.sofka.msc.entity.QPersonEntity.personEntity;
-
+import static com.rtravez.msc.entity.QUserEntity.userEntity;
+import static com.rtravez.msc.entity.QPersonEntity.personEntity;
 
 @Slf4j
 @Repository
@@ -28,7 +27,7 @@ public class PersonRepository extends GenericRepository<PersonEntity, Long> impl
             where.and(personEntity.status.isTrue());
 
             JPQLQuery<String> query = queryFactory.selectFrom(personEntity).select(personEntity.identification)
-                    .innerJoin(personEntity.customers, customerEntity)
+                    .innerJoin(personEntity.users, userEntity)
                     .where(where);
             return StringUtils.isNotBlank(query.fetchFirst());
         } catch (ExceptionManager e) {

@@ -1,6 +1,6 @@
-package com.sofka.msc.entity.common;
+package com.rtravez.msc.entity.common;
 
-import com.sofka.msc.entity.CustomerEntity;
+import com.rtravez.msc.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,23 +16,23 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-@Entity(name = "role_customers")
+@Entity(name = "role_users")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RoleCustomerEntity extends BaseEntity {
+public class RoleUserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_customer_id", unique = true, nullable = false)
-    private Long roleCustomerId;
+    @Column(name = "role_user_id", unique = true, nullable = false)
+    private Long roleUserId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rol_id", nullable = false)
+    @JoinColumn(name = "role_id", nullable = false)
     private RoleEntity role;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", nullable = false)
-    private CustomerEntity customer;
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 }

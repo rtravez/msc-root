@@ -1,6 +1,6 @@
-package com.sofka.msc.dto.request;
+package com.rtravez.msc.dto.request;
 
-import com.sofka.msc.dto.BaseDto;
+import com.rtravez.msc.dto.BaseDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

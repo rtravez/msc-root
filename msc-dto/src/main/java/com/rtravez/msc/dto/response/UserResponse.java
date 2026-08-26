@@ -1,4 +1,4 @@
-package com.sofka.msc.dto.response;
+package com.rtravez.msc.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -7,9 +7,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CustomerResponse {
+public class UserResponse {
 
-    private Long customerId;
+    private Long userId;
     private String username;
     private String name;
     private String lastname;

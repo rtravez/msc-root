@@ -3,14 +3,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.5</version>
+		<version>3.5.16</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>com.sofka.msc</groupId>
+	<groupId>com.rtravez.msc</groupId>
 	<artifactId>msc-root</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>Customers microservice</description>
+	<description>Users microservice</description>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -56,12 +56,6 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-oauth2-authorization-server</artifactId>
-			<version>1.5.2</version>
 		</dependency>
 
 		<dependency>

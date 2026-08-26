@@ -1,7 +1,7 @@
-package com.sofka.msc.repository;
+package com.rtravez.msc.repository;
 
-import com.sofka.msc.entity.PersonEntity;
-import com.sofka.msc.exception.ExceptionManager;
+import com.rtravez.msc.entity.PersonEntity;
+import com.rtravez.msc.exception.ExceptionManager;
 
 /**
  * <b> Description de la class, interface o enumeration. </b>

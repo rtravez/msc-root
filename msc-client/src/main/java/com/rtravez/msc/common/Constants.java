@@ -1,4 +1,4 @@
-package com.sofka.msc.common;
+package com.rtravez.msc.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

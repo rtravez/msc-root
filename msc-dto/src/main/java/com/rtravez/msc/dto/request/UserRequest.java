@@ -1,4 +1,4 @@
-package com.sofka.msc.dto.request;
+package com.rtravez.msc.dto.request;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,8 +7,8 @@ import jakarta.validation.constraints.NotEmpty;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class CustomerRequest extends PersonRequest {
-    private Long customerId;
+public class UserRequest extends PersonRequest {
+    private Long userId;
     @NotEmpty
     private String password;
     @NotEmpty

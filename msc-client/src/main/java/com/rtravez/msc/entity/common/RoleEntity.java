@@ -1,4 +1,4 @@
-package com.sofka.msc.entity.common;
+package com.rtravez.msc.entity.common;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,5 +31,5 @@ public class RoleEntity extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    private List<RoleCustomerEntity> roleCustomers;
+    private List<RoleUserEntity> roleUsers;
 }

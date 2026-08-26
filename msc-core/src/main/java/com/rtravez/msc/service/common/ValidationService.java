@@ -1,7 +1,7 @@
-package com.sofka.msc.service.common;
+package com.rtravez.msc.service.common;
 
-import com.sofka.msc.exception.ExceptionManager;
-import com.sofka.msc.util.ProjectUtil;
+import com.rtravez.msc.exception.ExceptionManager;
+import com.rtravez.msc.util.ProjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;

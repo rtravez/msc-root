@@ -1,6 +1,6 @@
-package com.sofka.msc.entity.view;
+package com.rtravez.msc.entity.view;
 
-import com.sofka.msc.entity.common.BaseEntity;
+import com.rtravez.msc.entity.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

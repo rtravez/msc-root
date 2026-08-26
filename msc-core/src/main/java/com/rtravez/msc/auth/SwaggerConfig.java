@@ -1,4 +1,4 @@
-package com.sofka.msc.auth;
+package com.rtravez.msc.auth;
 
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -10,7 +10,7 @@ public class SwaggerConfig {
 
 	@Bean
 	public OpenAPI apiOpenAPI() {
-		return new OpenAPI().info(new Info().title("Customer Service API")
-				.description("Customer Service API Description").version("1.0"));
+		return new OpenAPI().info(new Info().title("User Service API")
+				.description("User Service API Description").version("1.0"));
 	}
 }

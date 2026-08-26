@@ -1,7 +1,7 @@
-package com.sofka.msc.controller.exception;
+package com.rtravez.msc.controller.exception;
 
-import com.sofka.msc.dto.BaseResponseDto;
-import com.sofka.msc.exception.ExceptionManager;
+import com.rtravez.msc.dto.BaseResponseDto;
+import com.rtravez.msc.exception.ExceptionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

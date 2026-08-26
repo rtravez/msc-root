@@ -1,6 +1,6 @@
-package com.sofka.msc;
+package com.rtravez.msc;
 
-import com.sofka.msc.config.MscConfiguration;
+import com.rtravez.msc.config.MscConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

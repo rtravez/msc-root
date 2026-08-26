@@ -1,7 +1,7 @@
-package com.sofka.msc.entity.view;
+package com.rtravez.msc.entity.view;
 
-import com.sofka.msc.entity.CustomerEntity;
-import com.sofka.msc.entity.common.BaseEntity;
+import com.rtravez.msc.entity.UserEntity;
+import com.rtravez.msc.entity.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,12 +41,12 @@ public class AccountView extends BaseEntity {
     @Column(name = "initial_balance", nullable = false)
     private BigDecimal initialBalance;
 
-    @Column(name = "customer_id", nullable = false)
-    private Long customerId;
+    @Column(name = "user_id", nullable = false)
+    private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "customer_id", insertable = false, updatable = false)
-    private CustomerEntity customer;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
+    private UserEntity user;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<MovementView> movements;

@@ -1,6 +1,6 @@
-package com.sofka.msc.entity;
+package com.rtravez.msc.entity;
 
-import com.sofka.msc.entity.common.BaseEntity;
+import com.rtravez.msc.entity.common.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -50,5 +50,5 @@ public class PersonEntity extends BaseEntity {
     private Integer age;
 
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
-    private List<CustomerEntity> customers;
+    private List<UserEntity> users;
 }

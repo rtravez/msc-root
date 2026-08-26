@@ -1,4 +1,4 @@
-package com.sofka.msc.dto;
+package com.rtravez.msc.dto;
 
 import lombok.Builder;
 import lombok.Getter;

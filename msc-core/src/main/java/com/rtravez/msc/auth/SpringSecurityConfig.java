@@ -1,4 +1,4 @@
-package com.sofka.msc.auth;
+package com.rtravez.msc.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

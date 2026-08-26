@@ -1,8 +1,8 @@
-package com.sofka.msc.service;
+package com.rtravez.msc.service;
 
-import com.sofka.msc.entity.PersonEntity;
-import com.sofka.msc.exception.ExceptionManager;
-import com.sofka.msc.repository.IPersonRepository;
+import com.rtravez.msc.entity.PersonEntity;
+import com.rtravez.msc.exception.ExceptionManager;
+import com.rtravez.msc.repository.IPersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
-package com.sofka.msc.service.common;
+package com.rtravez.msc.service.common;
 
-import com.sofka.msc.exception.ExceptionManager;
+import com.rtravez.msc.exception.ExceptionManager;
 
 /**
  * <b> Description de la class, interface o enumeration. </b>

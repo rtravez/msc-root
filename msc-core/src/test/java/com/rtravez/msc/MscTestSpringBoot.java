@@ -1,6 +1,6 @@
-package com.sofka.msc;
+package com.rtravez.msc;
 
-import com.sofka.msc.config.MscConfiguration;
+import com.rtravez.msc.config.MscConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.boot.SpringApplication;
@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Slf4j
 @Import({MscConfiguration.class})
-@SpringBootApplication(scanBasePackages = {"com.sofka.msc"})
+@SpringBootApplication(scanBasePackages = {"com.rtravez.msc"})
 public class MscTestSpringBoot {
 
     /**

@@ -1,4 +1,4 @@
-package com.sofka.msc.entity.common;
+package com.rtravez.msc.entity.common;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -23,20 +23,20 @@ public abstract class BaseEntity implements Serializable {
     @Column(name = "creation_host", updatable = false, length = 50, nullable = false)
     protected String creationHost;
 
-    @Column(name = "modification_host", updatable = false, length = 50)
+    @Column(name = "modification_host", updatable = true, length = 50)
     protected String modificationHost;
 
     @Column(name = "creation_user", updatable = false, length = 50, nullable = false)
     protected String creationUser;
 
-    @Column(name = "modification_user", updatable = false, length = 50)
+    @Column(name = "modification_user", updatable = true, length = 50)
     protected String modificationUser;
 
     @Column(name = "creation_date", updatable = false, nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     protected Date creationDate;
 
-    @Column(name = "modification_date", updatable = false)
+    @Column(name = "modification_date", updatable = true)
     @Temporal(TemporalType.TIMESTAMP)
     protected Date modificationDate;
 

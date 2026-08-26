@@ -1,7 +1,7 @@
-package com.sofka.msc.controller.common;
+package com.rtravez.msc.controller.common;
 
-import com.sofka.msc.dto.BaseResponseDto;
-import com.sofka.msc.service.common.IValidationService;
+import com.rtravez.msc.dto.BaseResponseDto;
+import com.rtravez.msc.service.common.IValidationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,8 +1,8 @@
-package com.sofka.msc.entity;
+package com.rtravez.msc.entity;
 
-import com.sofka.msc.entity.common.BaseEntity;
-import com.sofka.msc.entity.common.RoleCustomerEntity;
-import com.sofka.msc.entity.view.AccountView;
+import com.rtravez.msc.entity.common.BaseEntity;
+import com.rtravez.msc.entity.common.RoleUserEntity;
+import com.rtravez.msc.entity.view.AccountView;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,17 +20,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 
-@Entity(name = "customers")
+@Entity(name = "users")
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CustomerEntity extends BaseEntity {
+public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id", unique = true, nullable = false)
-    private Long customerId;
+    @Column(name = "user_id", unique = true, nullable = false)
+    private Long userId;
 
     @Column(nullable = false, length = 60)
     private String password;
@@ -38,14 +38,14 @@ public class CustomerEntity extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String username;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
-    private List<RoleCustomerEntity> roleCustomers;
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<RoleUserEntity> roleUsers;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity person;
 
-    @OneToMany(mappedBy = "customer", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<AccountView> accounts;
 
 }

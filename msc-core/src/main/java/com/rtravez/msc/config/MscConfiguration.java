@@ -1,4 +1,4 @@
-package com.sofka.msc.config;
+package com.rtravez.msc.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

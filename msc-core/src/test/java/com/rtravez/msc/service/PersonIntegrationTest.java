@@ -1,8 +1,8 @@
-package com.sofka.msc.service;
+package com.rtravez.msc.service;
 
 import com.github.javafaker.Faker;
-import com.sofka.msc.dto.PersonDto;
-import com.sofka.msc.entity.PersonEntity;
+import com.rtravez.msc.dto.PersonDto;
+import com.rtravez.msc.entity.PersonEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;

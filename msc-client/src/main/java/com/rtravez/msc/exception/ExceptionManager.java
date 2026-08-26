@@ -1,5 +1,5 @@
 
-package com.sofka.msc.exception;
+package com.rtravez.msc.exception;
 
 import java.io.Serial;
 
