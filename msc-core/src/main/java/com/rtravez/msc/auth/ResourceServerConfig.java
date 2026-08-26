@@ -31,7 +31,7 @@ public class ResourceServerConfig {
 						.requestMatchers(HttpMethod.GET, "/api/customers", "/api/customers/{id}", "/api/customers/**").permitAll()
 						.anyRequest().authenticated())
 				.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}))
-				.csrf(AbstractHttpConfigurer::disable)
+				.csrf(csrf -> csrf.disable())
 				.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 		return http.build();
 	}

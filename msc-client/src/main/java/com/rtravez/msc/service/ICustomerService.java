@@ -4,7 +4,6 @@ import com.sofka.msc.dto.request.CustomerRequest;
 import com.sofka.msc.dto.response.CustomerResponse;
 import com.sofka.msc.entity.CustomerEntity;
 import com.sofka.msc.exception.ExceptionManager;
-import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +14,7 @@ import java.util.Optional;
  * @author renetravez
  * @version $1.0$
  */
-public interface ICustomerService extends IGenericService<CustomerEntity, Long>, UserDetailsService {
+public interface ICustomerService extends IGenericService<CustomerEntity, Long> {
 
     /**
      * Find customer by username

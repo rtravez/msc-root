@@ -8,10 +8,6 @@ import com.sofka.msc.exception.ExceptionManager;
 import com.sofka.msc.repository.ICustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.sofka.msc.common.Constants.CREATION_HOST;
 import static com.sofka.msc.common.Constants.CREATION_USER;
@@ -44,26 +39,6 @@ public class CustomerService extends GenericService<CustomerEntity, Long, ICusto
 
     protected CustomerService(ICustomerRepository repository) {
         super(repository);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<CustomerEntity> customer = this.findCustomerByUsername(username);
-
-        if (customer.isEmpty()) {
-            log.error("Error en el Login: no existe el usuario '{}' en el sistema!", username);
-            throw new UsernameNotFoundException("Username: " + username + " no existe en el sistema!");
-        }
-
-        List<SimpleGrantedAuthority> authorities = customer.get().getRoleCustomers().stream().map(role -> new SimpleGrantedAuthority(role.getRole().getName())).collect(Collectors.toList());
-        authorities.forEach(authority -> log.info("Role: ".concat(authority.getAuthority())));
-
-        if (authorities.isEmpty()) {
-            log.error("Error en el Login: Usuario {} no tiene roles asignados!", username);
-            throw new UsernameNotFoundException("Error en el Login: usuario " + username + " no tiene roles asignados!");
-        }
-        return new User(customer.get().getUsername(), customer.get().getPassword(), customer.get().getStatus(), true, true, true, authorities);
     }
 
     @Override
