@@ -6,22 +6,16 @@ import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 import com.rtravez.msc.repository.IUserRepository;
+import com.rtravez.msc.web.ClientIpProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-
-import static com.rtravez.msc.common.Constants.CREATION_HOST;
-import static com.rtravez.msc.common.Constants.CREATION_USER;
-import static com.rtravez.msc.common.Constants.MODIFICATION_HOST;
-import static com.rtravez.msc.common.Constants.MODIFICATION_USER;
 
 /**
  * <b> Description de la clase, interface o enumeration. </b>
@@ -36,6 +30,8 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private PersonService personService;
+    @Autowired
+    private ClientIpProvider clientIpProvider;
 
     protected UserService(IUserRepository repository) {
         super(repository);
@@ -61,9 +57,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                     .build();
 
             person.setStatus(request.getStatus());
-            person.setCreationUser(CREATION_USER);
-            person.setCreationHost(CREATION_HOST);
-            person.setCreationDate(Date.from(Instant.now()));
+            person.setCreationHost(clientIpProvider.getCurrentIp());
             personService.save(person);
 
             UserEntity user = UserEntity.builder()
@@ -73,9 +67,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                     .build();
 
             user.setStatus(request.getStatus());
-            user.setCreationUser(CREATION_USER);
-            user.setCreationHost(CREATION_HOST);
-            user.setCreationDate(Date.from(Instant.now()));
+            user.setCreationHost(clientIpProvider.getCurrentIp());
             super.save(user);
 
             return UserResponse.builder()
@@ -161,9 +153,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
         user.setPerson(user.getPerson());
 
         user.setStatus(request.getStatus());
-        user.setModificationUser(MODIFICATION_USER);
-        user.setModificationHost(MODIFICATION_HOST);
-        user.setModificationDate(Date.from(Instant.now()));
+        user.setModificationHost(clientIpProvider.getCurrentIp());
         super.update(user);
 
         PersonEntity person = user.getPerson();
@@ -176,9 +166,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
         person.setGender(request.getGender());
 
         person.setStatus(request.getStatus());
-        person.setModificationUser(MODIFICATION_USER);
-        person.setModificationHost(MODIFICATION_HOST);
-        person.setModificationDate(Date.from(Instant.now()));
+        person.setModificationHost(clientIpProvider.getCurrentIp());
         personService.update(person);
 
         return UserResponse.builder()
