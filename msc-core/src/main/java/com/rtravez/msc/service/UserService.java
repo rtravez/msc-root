@@ -5,10 +5,9 @@ import com.rtravez.msc.dto.response.UserResponse;
 import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
+import com.rtravez.msc.repository.IPersonRepository;
 import com.rtravez.msc.repository.IUserRepository;
 import com.rtravez.msc.web.ClientIpProvider;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,17 +23,19 @@ import java.util.Optional;
  * @version $1.0$
  */
 @Service
-@Slf4j
 public class UserService extends GenericService<UserEntity, Long, IUserRepository> implements IUserService {
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
-    @Autowired
-    private PersonService personService;
-    @Autowired
-    private ClientIpProvider clientIpProvider;
+    private final IPersonRepository personRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final ClientIpProvider clientIpProvider;
 
-    protected UserService(IUserRepository repository) {
+    protected UserService(IUserRepository repository,
+            IPersonRepository personRepository,
+            BCryptPasswordEncoder passwordEncoder,
+            ClientIpProvider clientIpProvider) {
         super(repository);
+        this.passwordEncoder = passwordEncoder;
+        this.personRepository = personRepository;
+        this.clientIpProvider = clientIpProvider;
     }
 
     @Override
@@ -45,100 +46,78 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     @Override
     @Transactional
     public UserResponse processSaveUser(UserRequest request) throws ExceptionManager {
-        try {
-            PersonEntity person = PersonEntity.builder()
-                    .name(request.getName())
-                    .lastname(request.getLastname())
-                    .identification(request.getIdentification())
-                    .age(request.getAge())
-                    .address(request.getAddress())
-                    .telephone(request.getTelephone())
-                    .gender(request.getGender())
-                    .build();
+        PersonEntity person = PersonEntity.builder()
+                .name(request.getName())
+                .lastname(request.getLastname())
+                .identification(request.getIdentification())
+                .age(request.getAge())
+                .address(request.getAddress())
+                .telephone(request.getTelephone())
+                .gender(request.getGender())
+                .build();
 
-            person.setStatus(request.getStatus());
-            person.setCreatedHost(clientIpProvider.getCurrentIp());
-            personService.save(person);
+        person.setStatus(request.getStatus());
+        person.setCreatedHost(clientIpProvider.getCurrentIp());
+        personRepository.save(person);
 
-            UserEntity user = UserEntity.builder()
-                    .username(request.getUsername())
-                    .password(passwordEncoder.encode(request.getPassword()))
-                    .person(person)
-                    .build();
+        UserEntity user = UserEntity.builder()
+                .username(request.getUsername())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .person(person)
+                .build();
 
-            user.setStatus(request.getStatus());
-            user.setCreatedHost(clientIpProvider.getCurrentIp());
-            super.save(user);
+        user.setStatus(request.getStatus());
+        user.setCreatedHost(clientIpProvider.getCurrentIp());
+        super.save(user);
 
-            return UserResponse.builder()
-                    .name(person.getName())
-                    .lastname(person.getLastname())
-                    .address(person.getAddress())
-                    .telephone(person.getTelephone())
-                    .identification(person.getIdentification())
-                    .userId(user.getUserId())
-                    .username(user.getUsername())
-                    .status(user.getStatus()).build();
-        } catch (Exception e) {
-            log.error("processSaveUser", e);
-            throw new ExceptionManager.GettingException("Error al guardar el registro");
-        }
+        return UserResponse.builder()
+                .name(person.getName())
+                .lastname(person.getLastname())
+                .address(person.getAddress())
+                .telephone(person.getTelephone())
+                .identification(person.getIdentification())
+                .userId(user.getUserId())
+                .username(user.getUsername())
+                .status(user.getStatus()).build();
     }
 
     @Override
     @Transactional
     public UserResponse processUpdateUser(UserRequest request) throws ExceptionManager {
-        try {
-            Optional<UserEntity> user = repository.findUserByIdentification(request);
+        Optional<UserEntity> user = repository.findUserByIdentification(request);
 
-            return user.map(value -> this.updateUser(value, request))
-                    .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
-        } catch (ExceptionManager e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("processUpdateUser", e);
-            throw new ExceptionManager.GettingException("Error al actualizar el registro");
-        }
+        return user.map(value -> this.updateUser(value, request))
+                .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
     }
 
     @Override
     public List<UserResponse> findUserAll() throws ExceptionManager {
-        try {
-            List<UserResponse> userResponses = new ArrayList<>();
-            List<UserEntity> users = repository.findAll();
-            users.forEach(it -> userResponses.add(UserResponse.builder()
-                    .name(it.getPerson().getName())
-                    .lastname(it.getPerson().getLastname())
-                    .address(it.getPerson().getAddress())
-                    .telephone(it.getPerson().getTelephone())
-                    .identification(it.getPerson().getIdentification())
-                    .status(it.getStatus())
-                    .username(it.getUsername())
-                    .userId(it.getUserId())
-                    .build()));
-            return userResponses;
-        } catch (Exception e) {
-            log.error("findUserAll", e);
-            throw new ExceptionManager.FindingException("Error al buscar los registros");
-        }
+        List<UserResponse> userResponses = new ArrayList<>();
+        List<UserEntity> users = repository.findAll();
+        users.forEach(it -> userResponses.add(UserResponse.builder()
+                .name(it.getPerson().getName())
+                .lastname(it.getPerson().getLastname())
+                .address(it.getPerson().getAddress())
+                .telephone(it.getPerson().getTelephone())
+                .identification(it.getPerson().getIdentification())
+                .status(it.getStatus())
+                .username(it.getUsername())
+                .userId(it.getUserId())
+                .build()));
+        return userResponses;
     }
 
     @Override
     @Transactional
     public Long deleteUserById(Long id) throws ExceptionManager {
-        try {
-            Optional<UserEntity> user = repository.findById(id);
+        Optional<UserEntity> user = repository.findById(id);
 
-            if (user.isPresent()) {
-                repository.deleteById(user.get().getUserId());
-                personService.deleteById(user.get().getPerson().getPersonId());
-                return 1L;
-            }
-            return 0L;
-        } catch (ExceptionManager e) {
-            log.error("deleteUserById", e);
-            throw new ExceptionManager.DeletingException("Error al eliminar el registro");
+        if (user.isPresent()) {
+            repository.deleteById(user.get().getUserId());
+            personRepository.deleteById(user.get().getPerson().getPersonId());
+            return 1L;
         }
+        return 0L;
     }
 
     /**
@@ -168,7 +147,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
 
         person.setStatus(request.getStatus());
         person.setLastModifiedHost(clientIpProvider.getCurrentIp());
-        personService.update(person);
+        personRepository.update(person);
 
         return UserResponse.builder()
                 .name(person.getName())
@@ -185,24 +164,17 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
 
     @Override
     public UserResponse findUserByIdentification(UserRequest request) throws ExceptionManager {
-        try {
-            Optional<UserEntity> user = repository.findUserByIdentification(request);
+        Optional<UserEntity> user = repository.findUserByIdentification(request);
 
-            return user.map(userEntity -> UserResponse.builder()
-                    .name(userEntity.getPerson().getName())
-                    .lastname(userEntity.getPerson().getLastname())
-                    .address(userEntity.getPerson().getAddress())
-                    .telephone(userEntity.getPerson().getTelephone())
-                    .status(userEntity.getStatus())
-                    .userId(userEntity.getUserId())
-                    .username(userEntity.getUsername())
-                    .identification(userEntity.getPerson().getIdentification())
-                    .build()).orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
-        } catch (ExceptionManager e) {
-            throw e;
-        } catch (Exception e) {
-            log.error("findUserByIdentification", e);
-            throw new ExceptionManager.FindingException("Error al buscar el registro");
-        }
+        return user.map(userEntity -> UserResponse.builder()
+                .name(userEntity.getPerson().getName())
+                .lastname(userEntity.getPerson().getLastname())
+                .address(userEntity.getPerson().getAddress())
+                .telephone(userEntity.getPerson().getTelephone())
+                .status(userEntity.getStatus())
+                .userId(userEntity.getUserId())
+                .username(userEntity.getUsername())
+                .identification(userEntity.getPerson().getIdentification())
+                .build()).orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
     }
 }
