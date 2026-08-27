@@ -1,13 +1,10 @@
 package com.rtravez.msc.entity.view;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 import com.rtravez.msc.entity.PersonEntity;
-import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.entity.common.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,8 +15,11 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import java.math.BigDecimal;
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "accounts")
 @Builder

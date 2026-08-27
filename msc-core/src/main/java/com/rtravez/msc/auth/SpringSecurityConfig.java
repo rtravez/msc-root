@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SpringSecurityConfig {
 
 	@Bean
-	@Order(3)
+	@Order(2)
 	public SecurityFilterChain applicationSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers("/error", "/v3/api-docs/**", "/swagger-ui/**").permitAll()
