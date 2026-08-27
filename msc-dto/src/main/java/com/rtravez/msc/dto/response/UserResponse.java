@@ -15,7 +15,6 @@ public class UserResponse {
     private String lastname;
     private String address;
     private String telephone;
-    private String password;
     private String identification;
     private boolean status;
 
