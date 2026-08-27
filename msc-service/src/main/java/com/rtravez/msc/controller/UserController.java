@@ -66,7 +66,7 @@ public class UserController {
     @Operation(summary = "Find user by identification")
     public ResponseEntity<UserResponse> findUserByIdentification(@RequestBody UserRequest request) {
         UserResponse response = this.userService.findUserByIdentification(request);
-        return response == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(response);
+        return ResponseEntity.ok(response);
     }
 
     /**
@@ -98,10 +98,6 @@ public class UserController {
     @Operation(summary = "Update User")
     public ResponseEntity<BaseResponseDto<Object>> update(@Valid @RequestBody UserRequest request) {
         UserResponse response = userService.processUpdateUser(request);
-        if (response == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.builder().code(HttpStatus.NOT_FOUND.value()).message("El usuario no existe").build());
-        }
-
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(response).message("Usuario actualizado con \u00E9xito").build());
     }
 

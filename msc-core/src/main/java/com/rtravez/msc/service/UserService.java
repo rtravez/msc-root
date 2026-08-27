@@ -80,7 +80,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                     .username(user.getUsername())
                     .status(user.getStatus()).build();
         } catch (Exception e) {
-            log.error("processSaveUser: {0}", e);
+            log.error("processSaveUser", e);
             throw new ExceptionManager.GettingException("Error al guardar el registro");
         }
     }
@@ -91,9 +91,12 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
         try {
             Optional<UserEntity> user = repository.findUserByIdentification(request);
 
-            return user.map(value -> this.updateUser(value, request)).orElse(null);
+            return user.map(value -> this.updateUser(value, request))
+                    .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
+        } catch (ExceptionManager e) {
+            throw e;
         } catch (Exception e) {
-            log.error("processUpdateUser: {0}", e);
+            log.error("processUpdateUser", e);
             throw new ExceptionManager.GettingException("Error al actualizar el registro");
         }
     }
@@ -115,7 +118,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                     .build()));
             return userResponses;
         } catch (Exception e) {
-            log.error("findUserAll: ", e);
+            log.error("findUserAll", e);
             throw new ExceptionManager.FindingException("Error al buscar los registros");
         }
     }
@@ -133,7 +136,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
             }
             return 0L;
         } catch (ExceptionManager e) {
-            log.error("deleteUserById: {0}", e);
+            log.error("deleteUserById", e);
             throw new ExceptionManager.DeletingException("Error al eliminar el registro");
         }
     }
@@ -194,9 +197,11 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                     .userId(userEntity.getUserId())
                     .username(userEntity.getUsername())
                     .identification(userEntity.getPerson().getIdentification())
-                    .build()).orElse(null);
+                    .build()).orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
+        } catch (ExceptionManager e) {
+            throw e;
         } catch (Exception e) {
-            log.error("findUserByIdentification: {0}", e);
+            log.error("findUserByIdentification", e);
             throw new ExceptionManager.FindingException("Error al buscar el registro");
         }
     }

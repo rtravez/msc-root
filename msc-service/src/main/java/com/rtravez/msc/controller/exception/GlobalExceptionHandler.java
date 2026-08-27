@@ -24,7 +24,9 @@ public class GlobalExceptionHandler {
         log.error("ExceptionManager error: ", ex);
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
-        if (ex instanceof ExceptionManager.NotValidFieldException ||
+        if (ex instanceof ExceptionManager.NotFoundException) {
+            status = HttpStatus.NOT_FOUND;
+        } else if (ex instanceof ExceptionManager.NotValidFieldException ||
             ex instanceof ExceptionManager.EmptyFieldException ||
             ex instanceof ExceptionManager.NotValidFormatException ||
             ex instanceof ExceptionManager.NullEntityException) {
