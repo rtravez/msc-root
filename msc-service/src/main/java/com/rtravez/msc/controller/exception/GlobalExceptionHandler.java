@@ -3,6 +3,8 @@ package com.rtravez.msc.controller.exception;
 import com.rtravez.msc.dto.BaseResponseDto;
 import com.rtravez.msc.exception.ExceptionManager;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -65,6 +67,16 @@ public class GlobalExceptionHandler {
                 .errors(errors)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<BaseResponseDto<Object>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        log.warn("Data integrity violation", ex);
+        BaseResponseDto<Object> response = BaseResponseDto.builder()
+                .code(HttpStatus.CONFLICT.value())
+                .message("La cuenta ya existe o los datos violan una restricción de integridad")
+                .build();
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
     @ExceptionHandler(Exception.class)

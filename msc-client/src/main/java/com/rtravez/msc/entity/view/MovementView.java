@@ -15,12 +15,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity(name = "movements")
+@Table(name = "movements", indexes = {
+    @jakarta.persistence.Index(name = "idx_movements_account_date", columnList = "account_id, movement_date")
+})
 @Builder
 @Getter
 @Setter

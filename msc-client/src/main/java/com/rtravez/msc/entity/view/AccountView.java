@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,6 +23,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity(name = "accounts")
+@Table(name = "accounts", uniqueConstraints = {
+    @jakarta.persistence.UniqueConstraint(name = "uk_accounts_account_number", columnNames = "account_number")
+}, indexes = {
+    @jakarta.persistence.Index(name = "idx_accounts_person_id", columnList = "person_id")
+})
 @Builder
 @Getter
 @Setter
