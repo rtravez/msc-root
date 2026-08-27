@@ -65,7 +65,8 @@ public class UserController {
     @PostMapping(path = "findUserByIdentification")
     @Operation(summary = "Find user by identification")
     public ResponseEntity<UserResponse> findUserByIdentification(@RequestBody UserRequest request) {
-        return ResponseEntity.ok(this.userService.findUserByIdentification(request));
+        UserResponse response = this.userService.findUserByIdentification(request);
+        return response == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(response);
     }
 
     /**
@@ -79,7 +80,7 @@ public class UserController {
     @Operation(summary = "Create User")
     public ResponseEntity<BaseResponseDto<Object>> save(@Valid @RequestBody UserRequest request) {
         if (Boolean.TRUE.equals(this.personService.exist(request.getIdentification()))) {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("El usuario ya existe").build());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDto.builder().code(HttpStatus.CONFLICT.value()).message("El usuario ya existe").build());
         }
 
         UserResponse response = userService.processSaveUser(request);
@@ -98,7 +99,7 @@ public class UserController {
     public ResponseEntity<BaseResponseDto<Object>> update(@Valid @RequestBody UserRequest request) {
         UserResponse response = userService.processUpdateUser(request);
         if (response == null) {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("El usuario no existe").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.builder().code(HttpStatus.NOT_FOUND.value()).message("El usuario no existe").build());
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(response).message("Usuario actualizado con \u00E9xito").build());
@@ -117,7 +118,7 @@ public class UserController {
         if (this.userService.deleteUserById(id) >= 1) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("Usuario eliminado con \u00E9xito").build());
         } else {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("El usuario no existe").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.builder().code(HttpStatus.NOT_FOUND.value()).message("El usuario no existe").build());
         }
     }
 }
