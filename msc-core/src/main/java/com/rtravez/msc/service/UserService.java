@@ -197,6 +197,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                     .status(userEntity.getStatus())
                     .userId(userEntity.getUserId())
                     .username(userEntity.getUsername())
+                    .identification(userEntity.getPerson().getIdentification())
                     .build()).orElse(null);
         } catch (Exception e) {
             log.error("findUserByIdentification: {0}", e);

@@ -1,7 +1,6 @@
 package com.rtravez.msc.entity;
 
 import com.rtravez.msc.entity.common.BaseEntity;
-import com.rtravez.msc.entity.common.RoleUserEntity;
 import com.rtravez.msc.entity.view.AccountView;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,14 +37,8 @@ public class UserEntity extends BaseEntity {
     @Column(nullable = false, length = 20)
     private String username;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<RoleUserEntity> roleUsers;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", nullable = false)
     private PersonEntity person;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    private List<AccountView> accounts;
 
 }

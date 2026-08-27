@@ -1,5 +1,6 @@
 package com.rtravez.msc.entity.view;
 
+import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.entity.common.BaseEntity;
 import lombok.AllArgsConstructor;
@@ -41,12 +42,12 @@ public class AccountView extends BaseEntity {
     @Column(name = "initial_balance", nullable = false)
     private BigDecimal initialBalance;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
+    @Column(name = "person_id", nullable = false)
+    private Long personId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
-    private UserEntity user;
+    @JoinColumn(name = "person_id", referencedColumnName = "person_id", insertable = false, updatable = false)
+    private PersonEntity person;
 
     @OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
     private List<MovementView> movements;

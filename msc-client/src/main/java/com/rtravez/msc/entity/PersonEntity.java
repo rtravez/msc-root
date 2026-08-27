@@ -1,6 +1,7 @@
 package com.rtravez.msc.entity;
 
 import com.rtravez.msc.entity.common.BaseEntity;
+import com.rtravez.msc.entity.view.AccountView;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+
 import java.util.List;
 
 @Entity(name = "persons")
@@ -51,4 +53,7 @@ public class PersonEntity extends BaseEntity {
 
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
     private List<UserEntity> users;
+
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY)
+    private List<AccountView> accounts;
 }
