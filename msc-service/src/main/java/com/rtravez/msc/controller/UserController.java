@@ -61,6 +61,7 @@ public class UserController {
      * @param request
      * @return
      */
+    @Secured({"ROLE_ADMIN"})
     @PostMapping(path = "findUserByIdentification")
     @Operation(summary = "Find user by identification")
     public ResponseEntity<UserResponse> findUserByIdentification(@RequestBody UserRequest request) {
