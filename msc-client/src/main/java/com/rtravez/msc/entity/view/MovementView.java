@@ -18,7 +18,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity(name = "movements")
 @Builder
@@ -34,7 +34,7 @@ public class MovementView extends BaseEntity {
 
     @Column(name = "movement_date", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date movementDate;
+    private LocalDateTime movementDate;
 
     @Column(name = "movement_type", nullable = false, length = 1)
     private Character movementType;

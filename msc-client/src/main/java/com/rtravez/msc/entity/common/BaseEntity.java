@@ -17,7 +17,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -28,29 +28,29 @@ public abstract class BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Column(name = "creation_host", updatable = false, length = 50, nullable = false)
-    protected String creationHost;
+    @Column(name = "created_host", updatable = false, length = 50, nullable = false)
+    protected String createdHost;
 
-    @Column(name = "modification_host", updatable = true, length = 50)
-    protected String modificationHost;
+    @Column(name = "last_modified_host", length = 50)
+    protected String lastModifiedHost;
 
-    @Column(name = "creation_user", updatable = false, length = 50, nullable = false)
+    @Column(name = "created_user", updatable = false, length = 50, nullable = false)
     @CreatedBy
-    protected String creationUser;
+    protected String createdUser;
 
-    @Column(name = "modification_user", updatable = true, length = 50)
+    @Column(name = "last_modified_user", length = 50)
     @LastModifiedBy
-    protected String modificationUser;
+    protected String lastModifiedUser;
 
-    @Column(name = "creation_date", updatable = false, nullable = false)
+    @Column(name = "created_date", updatable = false, nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    protected Date creationDate;
+    protected LocalDateTime createdDate;
 
-    @Column(name = "modification_date", updatable = true)
+    @Column(name = "last_modified_date")
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    protected Date modificationDate;
+    protected LocalDateTime lastModifiedDate;
 
     @Column(name = "status", nullable = false)
     protected Boolean status;

@@ -7,8 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 import jakarta.validation.constraints.Size;
+
+import java.io.Serial;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @SuperBuilder
@@ -16,18 +18,19 @@ import java.util.Date;
 @NoArgsConstructor
 public abstract class BaseDto implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Size(max = 50)
-    protected String creationHost;
+    protected String createdHost;
     @Size(max = 50)
-    protected String modificationHost;
+    protected String lastModifiedHost;
     @Size(max = 50)
-    protected String creationUser;
+    protected String createdUser;
     @Size(max = 50)
-    protected String modificationUser;
-    protected Date creationDate;
-    protected Date modificationDate;
+    protected String lastModifiedUser;
+    protected LocalDateTime createdDate;
+    protected LocalDateTime lastModifiedDate;
     @Builder.Default
     protected Boolean status = true;
 }

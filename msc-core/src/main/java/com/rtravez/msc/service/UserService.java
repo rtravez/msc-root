@@ -2,8 +2,8 @@ package com.rtravez.msc.service;
 
 import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.dto.response.UserResponse;
-import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.entity.PersonEntity;
+import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 import com.rtravez.msc.repository.IUserRepository;
 import com.rtravez.msc.web.ClientIpProvider;
@@ -57,7 +57,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                     .build();
 
             person.setStatus(request.getStatus());
-            person.setCreationHost(clientIpProvider.getCurrentIp());
+            person.setCreatedHost(clientIpProvider.getCurrentIp());
             personService.save(person);
 
             UserEntity user = UserEntity.builder()
@@ -67,7 +67,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                     .build();
 
             user.setStatus(request.getStatus());
-            user.setCreationHost(clientIpProvider.getCurrentIp());
+            user.setCreatedHost(clientIpProvider.getCurrentIp());
             super.save(user);
 
             return UserResponse.builder()
@@ -153,7 +153,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
         user.setPerson(user.getPerson());
 
         user.setStatus(request.getStatus());
-        user.setModificationHost(clientIpProvider.getCurrentIp());
+        user.setLastModifiedHost(clientIpProvider.getCurrentIp());
         super.update(user);
 
         PersonEntity person = user.getPerson();
@@ -166,7 +166,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
         person.setGender(request.getGender());
 
         person.setStatus(request.getStatus());
-        person.setModificationHost(clientIpProvider.getCurrentIp());
+        person.setLastModifiedHost(clientIpProvider.getCurrentIp());
         personService.update(person);
 
         return UserResponse.builder()

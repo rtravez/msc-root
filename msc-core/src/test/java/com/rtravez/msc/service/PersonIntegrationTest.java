@@ -38,7 +38,7 @@ class PersonIntegrationTest {
     private ModelMapper modelMapper;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         person1 = entityManager.persist(PersonEntity.builder()
                 .name("René")
                 .lastname("Trávez")
