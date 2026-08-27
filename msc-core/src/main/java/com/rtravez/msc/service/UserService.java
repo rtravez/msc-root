@@ -24,6 +24,7 @@ import java.util.Optional;
  */
 @Service
 public class UserService extends GenericService<UserEntity, Long, IUserRepository> implements IUserService {
+    
     private final IPersonRepository personRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ClientIpProvider clientIpProvider;
