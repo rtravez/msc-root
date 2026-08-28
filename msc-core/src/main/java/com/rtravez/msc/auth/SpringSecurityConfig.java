@@ -25,6 +25,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SpringSecurityConfig {
 
 	private static final String ROLE_ADMIN = "ROLE_ADMIN";
+	private static final String USERS_API_PATH = "/api/users/**";
 	private static final String[] PUBLIC_ENDPOINTS = {
 			"/error",
 			"/v3/api-docs/**",
@@ -39,11 +40,10 @@ public class SpringSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-				.requestMatchers(HttpMethod.GET, "/api/users", "/api/users/{id}", "/api/users/**")
-				.hasAuthority(ROLE_ADMIN)
-				.requestMatchers(HttpMethod.POST, "/api/users/**").hasAuthority(ROLE_ADMIN)
-				.requestMatchers(HttpMethod.PUT, "/api/users/**").hasAuthority(ROLE_ADMIN)
-				.requestMatchers(HttpMethod.DELETE, "/api/users/**").hasAuthority(ROLE_ADMIN)
+				.requestMatchers(HttpMethod.GET, USERS_API_PATH).hasAuthority(ROLE_ADMIN)
+				.requestMatchers(HttpMethod.POST, USERS_API_PATH).hasAuthority(ROLE_ADMIN)
+				.requestMatchers(HttpMethod.PUT, USERS_API_PATH).hasAuthority(ROLE_ADMIN)
+				.requestMatchers(HttpMethod.DELETE, USERS_API_PATH).hasAuthority(ROLE_ADMIN)
 				.anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.oauth2ResourceServer(
