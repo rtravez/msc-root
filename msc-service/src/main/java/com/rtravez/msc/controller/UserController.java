@@ -7,7 +7,6 @@ import com.rtravez.msc.service.IUserService;
 import com.rtravez.msc.service.IPersonService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -33,10 +32,13 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
-    @Autowired
-    private IUserService userService;
-    @Autowired
-    private IPersonService personService;
+    private final IUserService userService;
+    private final IPersonService personService;
+
+    public UserController(IUserService userService, IPersonService personService) {
+        this.userService = userService;
+        this.personService = personService;
+    }
 
     /**
      * Find user all
