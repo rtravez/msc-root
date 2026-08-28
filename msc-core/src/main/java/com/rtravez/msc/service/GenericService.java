@@ -3,14 +3,12 @@ package com.rtravez.msc.service;
 import com.rtravez.msc.exception.ExceptionManager;
 import com.rtravez.msc.repository.IGenericRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-@Service
 @Slf4j
 public abstract class GenericService<T, ID extends Serializable, R extends IGenericRepository<T, ID>> implements IGenericService<T, ID> {
 
@@ -57,7 +55,7 @@ public abstract class GenericService<T, ID extends Serializable, R extends IGene
 	@Transactional
 	public void deleteById(ID id) throws ExceptionManager {
 		try {
-			repository.deleteById(id);
+			repository.findById(id).ifPresent(this::delete);
 		} catch (Exception e) {
 			log.error("deleteById: ", e);
 			throw new ExceptionManager.GettingException("Error al eliminar el registro");

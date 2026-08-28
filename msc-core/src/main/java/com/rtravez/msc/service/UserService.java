@@ -8,6 +8,7 @@ import com.rtravez.msc.exception.ExceptionManager;
 import com.rtravez.msc.repository.IPersonRepository;
 import com.rtravez.msc.repository.IUserRepository;
 import com.rtravez.msc.web.ClientIpProvider;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -95,7 +96,9 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     public List<UserResponse> findUserAll() throws ExceptionManager {
         List<UserResponse> userResponses = new ArrayList<>();
         List<UserEntity> users = repository.findAll();
-        users.forEach(it -> userResponses.add(UserResponse.builder()
+        users.stream()
+                .filter(it -> Boolean.TRUE.equals(it.getStatus()))
+                .forEach(it -> userResponses.add(UserResponse.builder()
                 .name(it.getPerson().getName())
                 .lastname(it.getPerson().getLastname())
                 .address(it.getPerson().getAddress())
@@ -137,17 +140,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
         user.setLastModifiedHost(clientIpProvider.getCurrentIp());
         super.update(user);
 
-        PersonEntity person = user.getPerson();
-        person.setName(request.getName());
-        person.setLastname(request.getLastname());
-        person.setIdentification(request.getIdentification());
-        person.setAge(request.getAge());
-        person.setAddress(request.getAddress());
-        person.setTelephone(request.getTelephone());
-        person.setGender(request.getGender());
-
-        person.setStatus(request.getStatus());
-        person.setLastModifiedHost(clientIpProvider.getCurrentIp());
+        PersonEntity person = getPerson(user, request);
         personRepository.update(person);
 
         return UserResponse.builder()
@@ -161,6 +154,21 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                 .username(user.getUsername())
                 .build();
 
+    }
+
+    private @NonNull PersonEntity getPerson(UserEntity user, UserRequest request) {
+        PersonEntity person = user.getPerson();
+        person.setName(request.getName());
+        person.setLastname(request.getLastname());
+        person.setIdentification(request.getIdentification());
+        person.setAge(request.getAge());
+        person.setAddress(request.getAddress());
+        person.setTelephone(request.getTelephone());
+        person.setGender(request.getGender());
+
+        person.setStatus(request.getStatus());
+        person.setLastModifiedHost(clientIpProvider.getCurrentIp());
+        return person;
     }
 
     @Override
