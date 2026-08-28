@@ -1,11 +1,9 @@
 package com.rtravez.msc.entity.view;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 import com.rtravez.msc.entity.common.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,12 +16,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity(name = "movements")
 @Table(name = "movements", indexes = {
-    @jakarta.persistence.Index(name = "idx_movements_account_date", columnList = "account_id, movement_date")
+        @jakarta.persistence.Index(name = "idx_movements_account_date", columnList = "account_id, movement_date")
 })
 @Builder
 @Getter
@@ -31,6 +32,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class MovementView extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "movement_id", unique = true, nullable = false)
@@ -43,10 +45,10 @@ public class MovementView extends BaseEntity {
     @Column(name = "movement_type", nullable = false, length = 1)
     private Character movementType;
 
-    @Column(name = "value", nullable = false)
+    @Column(name = "value", nullable = false, precision = 19, scale = 2)
     private BigDecimal value;
 
-    @Column(name = "available_balance", nullable = false)
+    @Column(name = "available_balance", nullable = false, precision = 19, scale = 2)
     private BigDecimal availableBalance;
 
     @Column(name = "account_id", nullable = false)
