@@ -66,7 +66,7 @@ public class UserController {
     @Secured({"ROLE_ADMIN"})
     @PostMapping(path = "findUserByIdentification")
     @Operation(summary = "Find user by identification")
-    public ResponseEntity<UserResponse> findUserByIdentification(@RequestBody UserRequest request) {
+    public ResponseEntity<UserResponse> findUserByIdentification(@Valid @RequestBody UserRequest request) {
         UserResponse response = this.userService.findUserByIdentification(request);
         return ResponseEntity.ok(response);
     }
