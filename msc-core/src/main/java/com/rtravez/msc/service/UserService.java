@@ -5,6 +5,8 @@ import com.rtravez.msc.dto.response.UserResponse;
 import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
+import com.rtravez.msc.mapper.UserMapper;
+import com.rtravez.msc.mapper.UserRequestToPersonMapper;
 import com.rtravez.msc.repository.IPersonRepository;
 import com.rtravez.msc.repository.IUserRepository;
 import com.rtravez.msc.web.ClientIpProvider;
@@ -13,7 +15,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,15 +30,21 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     private final IPersonRepository personRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ClientIpProvider clientIpProvider;
+    private final UserMapper userMapper;
+    private final UserRequestToPersonMapper userRequestToPersonMapper;
 
     protected UserService(IUserRepository repository,
             IPersonRepository personRepository,
             BCryptPasswordEncoder passwordEncoder,
-            ClientIpProvider clientIpProvider) {
+            ClientIpProvider clientIpProvider,
+            UserMapper userMapper,
+            UserRequestToPersonMapper userRequestToPersonMapper) {
         super(repository);
         this.passwordEncoder = passwordEncoder;
         this.personRepository = personRepository;
         this.clientIpProvider = clientIpProvider;
+        this.userMapper = userMapper;
+        this.userRequestToPersonMapper = userRequestToPersonMapper;
     }
 
     @Override
@@ -48,39 +55,24 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     @Override
     @Transactional
     public UserResponse processSaveUser(UserRequest request) throws ExceptionManager {
-        PersonEntity person = PersonEntity.builder()
-                .name(request.getName())
-                .lastname(request.getLastname())
-                .identification(request.getIdentification())
-                .age(request.getAge())
-                .address(request.getAddress())
-                .telephone(request.getTelephone())
-                .gender(request.getGender())
-                .build();
-
+        // Map request to PersonEntity
+        PersonEntity person = userRequestToPersonMapper.userRequestToPersonEntity(request);
         person.setStatus(request.getStatus());
         person.setCreatedHost(clientIpProvider.getCurrentIp());
         personRepository.save(person);
 
+        // Create and save UserEntity
         UserEntity user = UserEntity.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .person(person)
                 .build();
-
         user.setStatus(request.getStatus());
         user.setCreatedHost(clientIpProvider.getCurrentIp());
         super.save(user);
 
-        return UserResponse.builder()
-                .name(person.getName())
-                .lastname(person.getLastname())
-                .address(person.getAddress())
-                .telephone(person.getTelephone())
-                .identification(person.getIdentification())
-                .userId(user.getUserId())
-                .username(user.getUsername())
-                .status(user.getStatus()).build();
+        // Map UserEntity to UserResponse
+        return userMapper.userEntityToUserResponse(user);
     }
 
     @Override
@@ -94,21 +86,10 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
 
     @Override
     public List<UserResponse> findUserAll() throws ExceptionManager {
-        List<UserResponse> userResponses = new ArrayList<>();
-        List<UserEntity> users = repository.findAll();
-        users.stream()
+        return repository.findAll().stream()
                 .filter(it -> Boolean.TRUE.equals(it.getStatus()))
-                .forEach(it -> userResponses.add(UserResponse.builder()
-                .name(it.getPerson().getName())
-                .lastname(it.getPerson().getLastname())
-                .address(it.getPerson().getAddress())
-                .telephone(it.getPerson().getTelephone())
-                .identification(it.getPerson().getIdentification())
-                .status(it.getStatus())
-                .username(it.getUsername())
-                .userId(it.getUserId())
-                .build()));
-        return userResponses;
+                .map(userMapper::userEntityToUserResponse)
+                .toList();
     }
 
     @Override
@@ -143,16 +124,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
         PersonEntity person = getPerson(user, request);
         personRepository.update(person);
 
-        return UserResponse.builder()
-                .name(person.getName())
-                .lastname(person.getLastname())
-                .address(person.getAddress())
-                .telephone(person.getTelephone())
-                .identification(person.getIdentification())
-                .status(user.getStatus())
-                .userId(user.getUserId())
-                .username(user.getUsername())
-                .build();
+        return userMapper.userEntityToUserResponse(user);
 
     }
 
@@ -173,17 +145,8 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
 
     @Override
     public UserResponse findUserByIdentification(UserRequest request) throws ExceptionManager {
-        Optional<UserEntity> user = repository.findUserByIdentification(request);
-
-        return user.map(userEntity -> UserResponse.builder()
-                .name(userEntity.getPerson().getName())
-                .lastname(userEntity.getPerson().getLastname())
-                .address(userEntity.getPerson().getAddress())
-                .telephone(userEntity.getPerson().getTelephone())
-                .status(userEntity.getStatus())
-                .userId(userEntity.getUserId())
-                .username(userEntity.getUsername())
-                .identification(userEntity.getPerson().getIdentification())
-                .build()).orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
+        return repository.findUserByIdentification(request)
+                .map(userMapper::userEntityToUserResponse)
+                .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
     }
 }
