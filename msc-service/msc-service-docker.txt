@@ -3,7 +3,7 @@ docker network create cloud-rtravez
 docker images
 docker image ls
 docker run -P --name msc-service --network cloud-rtravez msc-service:latest
-docker run --name msc-service --network cloud-rtravez -p 8080:8080 msc-service:latest
+docker run --name msc-service --network cloud-rtravez -p 8081:8081 msc-service:latest
 docker container ls
 docker container --help
 docker ps
