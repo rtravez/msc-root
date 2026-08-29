@@ -12,6 +12,40 @@ services:
       POSTGRES_DB: ${DB_NAME:-db_test}
       POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_PASSWORD: ${DB_PASSWORD:-admin}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+
+  authorization-server-service:
+    image: rtravez/authorization-server:latest
+    container_name: authorization-server-service
+    ports:
+      - "8080:8080"
+    volumes:
+      - springdata:/tmp
+    restart: always
+    networks:
+      - cloud-rtravez
+    environment:
+      SERVER_PORT: ${OAUTH2_SERVICE_PORT:-8080}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      SPRING_DATASOURCE_URL: ${DB_URL:-jdbc:postgresql://service-postgres-server:5432/db_test}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin}
+      JWT_ISSUER_URI: ${JWT_ISSUER_URI:-http://localhost:8080/authorizationServer}
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-127.0.0.1,::1}
+    depends_on:
+      service-postgres-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:$${SERVER_PORT}/mscServices/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
 
   msc-service:
     image: rtravez/msc-service:latest
@@ -26,6 +60,20 @@ services:
     environment:
       SERVER_PORT: ${MSC_SERVICE_PORT:-8081}
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      SPRING_DATASOURCE_URL: ${DB_URL:-jdbc:postgresql://service-postgres-server:5432/db_test}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin}
+      JWT_ISSUER_URI: ${JWT_ISSUER_URI:-http://localhost:8080/authorizationServer}
+      TRUSTED_PROXIES: ${TRUSTED_PROXIES:-127.0.0.1,::1}
+    depends_on:
+      service-postgres-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:$${SERVER_PORT}/mscServices/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
 
   msa-service:
     image: rtravez/msa-service:latest
@@ -46,12 +94,23 @@ services:
       DB_URL: ${DB_URL:-jdbc:postgresql://service-postgres-server:5432/db_test}
       DB_USERNAME: ${DB_USERNAME:-postgres}
       DB_PASSWORD: ${DB_PASSWORD:-admin}
+      SPRING_DATASOURCE_URL: ${DB_URL:-jdbc:postgresql://service-postgres-server:5432/db_test}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME:-postgres}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD:-admin}
       JWT_ISSUER_URI: ${JWT_ISSUER_URI:-http://localhost:8080/authorizationServer}
       MSC_SERVICE_URL: ${MSC_SERVICE_URL:-/mscServices/api/users/findUserByIdentification}
       TRUSTED_PROXIES: ${TRUSTED_PROXIES:-127.0.0.1,::1}
     depends_on:
-      - service-postgres-server
-      - msc-service
+      service-postgres-server:
+        condition: service_healthy
+      msc-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:$${SERVER_PORT}/mscServices/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
 
 networks:
   cloud-rtravez:
