@@ -3,6 +3,7 @@ package com.rtravez.msc.mapper;
 import com.rtravez.msc.dto.PersonDto;
 import com.rtravez.msc.entity.PersonEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * MapStruct mapper for PersonEntity to DTO conversions.
@@ -28,6 +29,8 @@ public interface PersonMapper {
      * @param personDto the person DTO
      * @return the person entity
      */
+    @Mapping(target = "users", ignore = true)
+    @Mapping(target = "accounts", ignore = true)
     PersonEntity personDtoToPersonEntity(PersonDto personDto);
 
 }
