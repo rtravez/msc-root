@@ -47,13 +47,13 @@ public class UserController {
      */
     @GetMapping
     @Operation(summary = "Find User")
-    public ResponseEntity<BaseResponseDto<Object>> findUserAll() {
+    public ResponseEntity<BaseResponseDto<List<UserResponse>>> findUserAll() {
         List<UserResponse> userResponses = userService.findUserAll();
         if (userResponses.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("No existen usuarios").build());
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<List<UserResponse>>builder().code(HttpStatus.OK.value()).message("No existen usuarios").build());
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value())
+        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<List<UserResponse>>builder().code(HttpStatus.OK.value())
                 .data(userResponses).message("Usuarios encontrados con \u00E9xito").build());
     }
 
