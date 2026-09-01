@@ -85,6 +85,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserResponse> findUserAll() throws ExceptionManager {
         return repository.findAll().stream()
                 .filter(it -> Boolean.TRUE.equals(it.getStatus()))
