@@ -2,12 +2,11 @@ package com.rtravez.msc.repository;
 
 import org.springframework.data.repository.NoRepositoryBean;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface IGenericRepository<T, ID extends Serializable> {
+public interface IGenericRepository<T, T1> {
 
 	T save(T t);
 
@@ -15,9 +14,9 @@ public interface IGenericRepository<T, ID extends Serializable> {
 
 	void delete(T t);
 
-	void deleteById(ID id);
+	void deleteById(T1 id);
 
-	Optional<T> findById(ID id);
+	Optional<T> findById(T1 id);
 
 	List<T> findAll();
 }

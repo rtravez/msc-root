@@ -5,12 +5,11 @@ import com.rtravez.msc.repository.IGenericRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public abstract class GenericService<T, ID extends Serializable, R extends IGenericRepository<T, ID>> implements IGenericService<T, ID> {
+public abstract class GenericService<T, T1, R extends IGenericRepository<T, T1>> implements IGenericService<T, T1> {
 
 	protected final R repository;
 
@@ -31,7 +30,7 @@ public abstract class GenericService<T, ID extends Serializable, R extends IGene
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<T> findById(ID id) throws ExceptionManager {
+	public Optional<T> findById(T1 id) throws ExceptionManager {
 		try {
 			return repository.findById(id);
 		} catch (Exception e) {
@@ -53,9 +52,9 @@ public abstract class GenericService<T, ID extends Serializable, R extends IGene
 
 	@Override
 	@Transactional
-	public void deleteById(ID id) throws ExceptionManager {
+	public void deleteById(T1 id) throws ExceptionManager {
 		try {
-			repository.findById(id).ifPresent(this::delete);
+			repository.deleteById(id);
 		} catch (Exception e) {
 			log.error("deleteById: ", e);
 			throw new ExceptionManager.GettingException("Error al eliminar el registro");

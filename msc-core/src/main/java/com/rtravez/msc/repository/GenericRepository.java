@@ -1,24 +1,22 @@
 package com.rtravez.msc.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.querydsl.core.types.EntityPath;
+import com.querydsl.core.types.dsl.EntityPathBase;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 @NoRepositoryBean
-public abstract class GenericRepository<T, ID extends Serializable> implements IGenericRepository<T, ID> {
+public abstract class GenericRepository<T, T1> implements IGenericRepository<T, T1> {
 
 	protected EntityManager em;
 	protected JPAQueryFactory queryFactory;
-	protected Class<T> domainType;
+	protected final Class<T> domainType;
 
 	public EntityManager getEntityManager() {
 		return em;
@@ -31,7 +29,7 @@ public abstract class GenericRepository<T, ID extends Serializable> implements I
 	}
 
 	protected GenericRepository(Class<T> domainType) {
-		this.domainType = domainType;
+		this.domainType = Objects.requireNonNull(domainType, "domainType must not be null");
 	}
 
 	@Override
@@ -52,21 +50,17 @@ public abstract class GenericRepository<T, ID extends Serializable> implements I
 
 	@Override
 	public List<T> findAll() {
-		CriteriaBuilder cb = this.em.getCriteriaBuilder();
-		CriteriaQuery<T> criteriaQuery = cb.createQuery(domainType);
-		Root<T> root = criteriaQuery.from(domainType);
-		criteriaQuery.select(root);
-		TypedQuery<T> query = em.createQuery(criteriaQuery);
-		return query.getResultList();
+		EntityPath<T> entityPath = new EntityPathBase<>(domainType, domainType.getSimpleName());
+		return queryFactory.selectFrom(entityPath).fetch();
 	}
 
 	@Override
-	public Optional<T> findById(ID id) {
+	public Optional<T> findById(T1 id) {
 		return Optional.ofNullable(em.find(domainType, id));
 	}
 
 	@Override
-	public void deleteById(ID id) {
+	public void deleteById(T1 id) {
 		this.findById(id).ifPresent(this::delete);
 	}
 }
