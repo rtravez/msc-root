@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.Objects;
 
 @NoRepositoryBean
-public abstract class GenericRepository<T, T1> implements IGenericRepository<T, T1> {
+public abstract class GenericRepository<T, K> implements IGenericRepository<T, K> {
 
 	protected EntityManager em;
 	protected JPAQueryFactory queryFactory;
@@ -55,12 +55,12 @@ public abstract class GenericRepository<T, T1> implements IGenericRepository<T, 
 	}
 
 	@Override
-	public Optional<T> findById(T1 id) {
+	public Optional<T> findById(K id) {
 		return Optional.ofNullable(em.find(domainType, id));
 	}
 
 	@Override
-	public void deleteById(T1 id) {
+	public void deleteById(K id) {
 		this.findById(id).ifPresent(this::delete);
 	}
 }

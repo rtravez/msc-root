@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public abstract class GenericService<T, T1, R extends IGenericRepository<T, T1>> implements IGenericService<T, T1> {
+public abstract class GenericService<T, K, R extends IGenericRepository<T, K>> implements IGenericService<T, K> {
 
 	protected final R repository;
 
@@ -30,7 +30,7 @@ public abstract class GenericService<T, T1, R extends IGenericRepository<T, T1>>
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<T> findById(T1 id) throws ExceptionManager {
+	public Optional<T> findById(K id) throws ExceptionManager {
 		try {
 			return repository.findById(id);
 		} catch (Exception e) {
@@ -52,7 +52,7 @@ public abstract class GenericService<T, T1, R extends IGenericRepository<T, T1>>
 
 	@Override
 	@Transactional
-	public void deleteById(T1 id) throws ExceptionManager {
+	public void deleteById(K id) throws ExceptionManager {
 		try {
 			repository.deleteById(id);
 		} catch (Exception e) {

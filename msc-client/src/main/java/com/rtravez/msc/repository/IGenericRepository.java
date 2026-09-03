@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
-public interface IGenericRepository<T, T1> {
+public interface IGenericRepository<T, K> {
 
 	T save(T t);
 
@@ -14,9 +14,9 @@ public interface IGenericRepository<T, T1> {
 
 	void delete(T t);
 
-	void deleteById(T1 id);
+	void deleteById(K id);
 
-	Optional<T> findById(T1 id);
+	Optional<T> findById(K id);
 
 	List<T> findAll();
 }
