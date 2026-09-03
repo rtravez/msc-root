@@ -63,10 +63,7 @@
 
 				<configuration>
 					<source>${java.version}</source> <!-- depending on your project -->
-					<target>${java.version}</target> <!-- depending on your project -->
-					<compilerArgs>
-						<arg>-Amapstruct.verbose=true</arg>
-					</compilerArgs>
+					<target>${java.version}</target> <!-- depending on your project -->					
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
