@@ -63,17 +63,6 @@ public abstract class GenericService<T, K, R extends IGenericRepository<T, K>> i
 
 	@Override
 	@Transactional
-	public void delete(T entity) throws ExceptionManager {
-		try {
-			repository.delete(entity);
-		} catch (Exception e) {
-			log.error("delete: ", e);
-			throw new ExceptionManager.GettingException("Error al eliminar el registro");
-		}
-	}
-
-	@Override
-	@Transactional
 	public T update(T entity) throws ExceptionManager {
 		try {
 			return repository.save(entity);

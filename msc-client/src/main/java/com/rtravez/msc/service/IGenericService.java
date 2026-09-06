@@ -17,5 +17,4 @@ public interface IGenericService<T, K> {
 
 	void deleteById(K id) throws ExceptionManager;
 
-	void delete(T entity) throws ExceptionManager;
 }
