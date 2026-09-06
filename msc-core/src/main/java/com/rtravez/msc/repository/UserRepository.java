@@ -5,6 +5,7 @@ import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import jakarta.persistence.EntityManager;
 
 import java.util.Optional;
 
@@ -18,8 +19,8 @@ public class UserRepository extends GenericRepository<UserEntity, Long> implemen
     /**
      * Constructor
      */
-    public UserRepository() {
-        super(UserEntity.class);
+    public UserRepository(EntityManager entityManager) {
+        super(UserEntity.class, entityManager);
     }
 
     @Override

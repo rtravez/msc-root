@@ -7,6 +7,7 @@ import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
+import jakarta.persistence.EntityManager;
 
 import static com.rtravez.msc.entity.QUserEntity.userEntity;
 import static com.rtravez.msc.entity.QPersonEntity.personEntity;
@@ -15,8 +16,8 @@ import static com.rtravez.msc.entity.QPersonEntity.personEntity;
 @Repository
 public class PersonRepository extends GenericRepository<PersonEntity, Long> implements IPersonRepository {
 
-    public PersonRepository() {
-        super(PersonEntity.class);
+    public PersonRepository(EntityManager entityManager) {
+        super(PersonEntity.class, entityManager);
     }
 
     @Override

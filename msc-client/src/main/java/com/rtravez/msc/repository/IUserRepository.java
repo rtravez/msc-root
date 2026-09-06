@@ -3,6 +3,7 @@ package com.rtravez.msc.repository;
 import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
+import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.Optional;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
  * @author renetravez
  * @version $1.0$
  */
+@NoRepositoryBean
 public interface IUserRepository extends IGenericRepository<UserEntity, Long> {
 
     /**

@@ -120,10 +120,10 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
 
         user.setStatus(request.getStatus());
         user.setLastModifiedHost(clientIpProvider.getCurrentIp());
-        super.update(user);
+        repository.save(user);
 
         PersonEntity person = getPerson(user, request);
-        personRepository.update(person);
+        personRepository.save(person);
 
         return userMapper.userEntityToUserResponse(user);
 

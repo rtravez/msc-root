@@ -76,7 +76,7 @@ public abstract class GenericService<T, K, R extends IGenericRepository<T, K>> i
 	@Transactional
 	public T update(T entity) throws ExceptionManager {
 		try {
-			return repository.update(entity);
+			return repository.save(entity);
 		} catch (Exception e) {
 			log.error("update: ", e);
 			throw new ExceptionManager.GettingException("Error al actualizar el registro");
