@@ -1,17 +1,10 @@
 package com.rtravez.msc.controller;
 
-import com.rtravez.msc.dto.BaseResponseDto;
-import com.rtravez.msc.dto.request.UserRequest;
-import com.rtravez.msc.dto.response.UserResponse;
-import com.rtravez.msc.service.PersonService;
-import com.rtravez.msc.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,8 +16,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rtravez.msc.dto.BaseResponseDto;
+import com.rtravez.msc.dto.request.UserRequest;
+import com.rtravez.msc.dto.response.UserResponse;
+import com.rtravez.msc.service.PersonService;
+import com.rtravez.msc.service.UserService;
+
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
-import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * UserController
