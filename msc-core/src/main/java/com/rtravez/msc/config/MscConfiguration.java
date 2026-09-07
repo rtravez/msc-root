@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
  * @version 1.0
  */
 @EnableAsync
-@EnableJpaRepositories(repositoryImplementationPostfix = "Impl")
+@EnableJpaRepositories(basePackages = { "com.rtravez.msc.repository" }, repositoryImplementationPostfix = "Impl")
 public class MscConfiguration {
 
     @Bean

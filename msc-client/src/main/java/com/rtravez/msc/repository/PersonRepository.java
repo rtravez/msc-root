@@ -1,7 +1,5 @@
 package com.rtravez.msc.repository;
 
-import org.springframework.data.repository.NoRepositoryBean;
-
 import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 
