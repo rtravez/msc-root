@@ -14,7 +14,6 @@ import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 import com.rtravez.msc.mapper.UserMapper;
-import com.rtravez.msc.mapper.UserRequestToPersonMapper;
 import com.rtravez.msc.repository.IPersonRepository;
 import com.rtravez.msc.repository.IUserRepository;
 import com.rtravez.msc.web.ClientIpProvider;
