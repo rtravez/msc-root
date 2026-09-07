@@ -4,11 +4,9 @@ import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
 
@@ -17,12 +15,9 @@ import static com.rtravez.msc.entity.QPersonEntity.personEntity;
 
 @Slf4j
 @Repository
-public class PersonRepository extends SimpleJpaRepository<PersonEntity, Long> implements IPersonRepository {
-    private final JPAQueryFactory queryFactory;
-
+public class PersonRepository extends BaseRepository<PersonEntity, Long> implements IPersonRepository {
     public PersonRepository(EntityManager em) {
         super(PersonEntity.class, em);
-        this.queryFactory = new JPAQueryFactory(em);
     }
 
     @Override

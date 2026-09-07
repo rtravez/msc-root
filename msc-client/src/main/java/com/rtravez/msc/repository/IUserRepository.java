@@ -1,13 +1,12 @@
 package com.rtravez.msc.repository;
 
+import java.util.Optional;
+
+import org.springframework.data.repository.NoRepositoryBean;
+
 import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.NoRepositoryBean;
-
-import java.util.Optional;
 
 /**
  * <b> Description de la clase, interface o enumeration. </b>
@@ -15,8 +14,8 @@ import java.util.Optional;
  * @author renetravez
  * @version $1.0$
  */
-@NoRepositoryBean
-public interface IUserRepository extends JpaRepository<UserEntity, Long> {
+@NoRepositoryBean 
+public interface IUserRepository extends IBaseRepository<UserEntity, Long> {
 
     /**
      * Find user by username

@@ -1,6 +1,5 @@
 package com.rtravez.msc.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import com.rtravez.msc.entity.PersonEntity;
@@ -13,7 +12,7 @@ import com.rtravez.msc.exception.ExceptionManager;
  * @version $1.0$
  */
 @NoRepositoryBean
-public interface IPersonRepository extends JpaRepository<PersonEntity, Long> {
+public interface IPersonRepository extends IBaseRepository<PersonEntity, Long> {
 
     /**
      * Find person by identification
