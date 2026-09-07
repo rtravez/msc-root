@@ -32,7 +32,7 @@ public interface IUserService {
      * @return
      * @throws ExceptionManager
      */
-    UserResponse processSaveUser(UserRequest request) throws ExceptionManager;
+    UserResponse save(UserRequest request) throws ExceptionManager;
 
     /**
      * Update user
@@ -41,7 +41,7 @@ public interface IUserService {
      * @return
      * @throws ExceptionManager
      */
-    UserResponse processUpdateUser(UserRequest request) throws ExceptionManager;
+    UserResponse update(UserRequest request) throws ExceptionManager;
 
     /**
      * Find user all

@@ -85,7 +85,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDto.builder().code(HttpStatus.CONFLICT.value()).message("El usuario ya existe").build());
         }
 
-        UserResponse response = userService.processSaveUser(request);
+        UserResponse response = userService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDto.builder().code(HttpStatus.CREATED.value()).data(response).message("Usuario creado con \u00E9xito").build());
     }
 
@@ -99,7 +99,7 @@ public class UserController {
     @PutMapping
     @Operation(summary = "Update User")
     public ResponseEntity<BaseResponseDto<Object>> update(@Valid @RequestBody UserRequest request) {
-        UserResponse response = userService.processUpdateUser(request);
+        UserResponse response = userService.update(request);
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(response).message("Usuario actualizado con \u00E9xito").build());
     }
 

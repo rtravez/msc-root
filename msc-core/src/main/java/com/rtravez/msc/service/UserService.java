@@ -43,7 +43,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public UserResponse processSaveUser(UserRequest request) throws ExceptionManager {
+    public UserResponse save(UserRequest request) throws ExceptionManager {
         // Map request to PersonEntity
         PersonEntity person = userMapper.toEntity(request);
         person.setStatus(request.getStatus());
@@ -66,7 +66,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public UserResponse processUpdateUser(UserRequest request) throws ExceptionManager {
+    public UserResponse update(UserRequest request) throws ExceptionManager {
         Optional<UserEntity> user = userRepository.findUserByIdentification(request);
 
         return user.map(value -> this.updateUser(value, request))
