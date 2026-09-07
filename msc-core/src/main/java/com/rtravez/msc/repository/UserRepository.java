@@ -1,5 +1,6 @@
 package com.rtravez.msc.repository;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
@@ -17,12 +18,14 @@ import static com.rtravez.msc.entity.QPersonEntity.personEntity;
 @Slf4j
 @Repository
 public class UserRepository extends SimpleJpaRepository<UserEntity, Long> implements IUserRepository {
+    private final JPAQueryFactory queryFactory;
 
     /**
      * Constructor
      */
     public UserRepository(EntityManager em) {
         super(UserEntity.class, em);
+        this.queryFactory = new JPAQueryFactory(em);
     }
 
     @Override
@@ -43,7 +46,8 @@ public class UserRepository extends SimpleJpaRepository<UserEntity, Long> implem
                     .innerJoin(userEntity.person, personEntity)
                     .fetchJoin()
                     .where(userEntity.person.identification.eq(request.getIdentification())
-                            .and(userEntity.status.isTrue())).fetchFirst());
+                            .and(userEntity.status.isTrue()))
+                    .fetchFirst());
         } catch (Exception e) {
             log.error("findUserByIdentification: ", e);
             throw new ExceptionManager.FindingException("Error al buscar el registro");
