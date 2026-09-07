@@ -48,8 +48,8 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     }
 
     @Override
-    public Optional<UserEntity> findUserByUsername(String username) {
-        return repository.findUserByUsername(username);
+    public Optional<UserResponse> findUserByUsername(String username) {
+        return repository.findUserByUsername(username).map(userMapper::userEntityToUserResponse);
     }
 
     @Override

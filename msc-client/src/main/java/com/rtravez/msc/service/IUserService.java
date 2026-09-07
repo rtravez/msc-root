@@ -23,7 +23,7 @@ public interface IUserService extends IGenericService<UserEntity, Long> {
      * @return
      * @throws ExceptionManager
      */
-    Optional<UserEntity> findUserByUsername(String username) throws ExceptionManager;
+    Optional<UserResponse> findUserByUsername(String username) throws ExceptionManager;
 
     /**
      * Save user
