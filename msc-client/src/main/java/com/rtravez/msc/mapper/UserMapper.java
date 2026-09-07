@@ -32,7 +32,7 @@ public interface UserMapper {
     @Mapping(target = "telephone", source = "userEntity.person.telephone")
     @Mapping(target = "gender", source = "userEntity.person.gender")
     @Mapping(target = "age", source = "userEntity.person.age")
-    UserResponse userEntityToUserResponse(UserEntity userEntity);
+    UserResponse toResponse(UserEntity userEntity);
 
     /**
      * Maps UserRequest to PersonEntity.
@@ -45,6 +45,6 @@ public interface UserMapper {
     @Mapping(target = "personId", ignore = true)
     @Mapping(target = "users", ignore = true)
     @Mapping(target = "accounts", ignore = true)
-    PersonEntity userRequestToPersonEntity(UserRequest userRequest);
+    PersonEntity toEntity(UserRequest userRequest);
 
 }

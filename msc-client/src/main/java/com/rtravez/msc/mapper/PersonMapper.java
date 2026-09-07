@@ -21,7 +21,7 @@ public interface PersonMapper {
      * @param personEntity the person entity
      * @return the person DTO
      */
-    PersonResponse personEntityToPersonDto(PersonEntity personEntity);
+    PersonResponse toResponse(PersonEntity personEntity);
 
     /**
      * Maps PersonDto to PersonEntity.
@@ -31,6 +31,6 @@ public interface PersonMapper {
      */
     @Mapping(target = "users", ignore = true)
     @Mapping(target = "accounts", ignore = true)
-    PersonEntity personDtoToPersonEntity(PersonResponse personDto);
+    PersonEntity toEntity(PersonResponse response);
 
 }

@@ -39,14 +39,14 @@ public class UserService implements IUserService {
 
     @Override
     public Optional<UserResponse> findUserByUsername(String username) {
-        return userRepository.findUserByUsername(username).map(userMapper::userEntityToUserResponse);
+        return userRepository.findUserByUsername(username).map(userMapper::toResponse);
     }
 
     @Override
     @Transactional
     public UserResponse processSaveUser(UserRequest request) throws ExceptionManager {
         // Map request to PersonEntity
-        PersonEntity person = userMapper.userRequestToPersonEntity(request);
+        PersonEntity person = userMapper.toEntity(request);
         person.setStatus(request.getStatus());
         person.setCreatedHost(clientIpProvider.getCurrentIp());
         personRepository.save(person);
@@ -62,7 +62,7 @@ public class UserService implements IUserService {
         userRepository.save(user);
 
         // Map UserEntity to UserResponse
-        return userMapper.userEntityToUserResponse(user);
+        return userMapper.toResponse(user);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class UserService implements IUserService {
     public List<UserResponse> findUserAll() throws ExceptionManager {
         return userRepository.findAll().stream()
                 .filter(it -> Boolean.TRUE.equals(it.getStatus()))
-                .map(userMapper::userEntityToUserResponse)
+                .map(userMapper::toResponse)
                 .toList();
     }
 
@@ -115,7 +115,7 @@ public class UserService implements IUserService {
         PersonEntity person = getPerson(user, request);
         personRepository.save(person);
 
-        return userMapper.userEntityToUserResponse(user);
+        return userMapper.toResponse(user);
 
     }
 
@@ -137,7 +137,7 @@ public class UserService implements IUserService {
     @Override
     public UserResponse findUserByIdentification(UserRequest request) throws ExceptionManager {
         return userRepository.findUserByIdentification(request)
-                .map(userMapper::userEntityToUserResponse)
+                .map(userMapper::toResponse)
                 .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
     }
 }
