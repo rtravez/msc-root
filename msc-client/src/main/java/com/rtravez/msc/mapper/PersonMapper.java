@@ -1,5 +1,6 @@
 package com.rtravez.msc.mapper;
 
+import com.rtravez.msc.dto.request.PersonRequest;
 import com.rtravez.msc.dto.response.PersonResponse;
 import com.rtravez.msc.entity.PersonEntity;
 import org.mapstruct.Mapper;
@@ -22,6 +23,16 @@ public interface PersonMapper {
      * @return the person DTO
      */
     PersonResponse toResponse(PersonEntity personEntity);
+
+    /**
+     * Maps a person request to an entity.
+     *
+     * @param request the person request
+     * @return the person entity
+     */
+    @Mapping(target = "users", ignore = true)
+    @Mapping(target = "accounts", ignore = true)
+    PersonEntity toEntity(PersonRequest request);
 
     /**
      * Maps PersonDto to PersonEntity.

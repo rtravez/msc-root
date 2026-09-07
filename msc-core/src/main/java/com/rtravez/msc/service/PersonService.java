@@ -1,12 +1,14 @@
 package com.rtravez.msc.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.rtravez.msc.dto.request.PersonRequest;
 import com.rtravez.msc.dto.response.PersonResponse;
+import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 import com.rtravez.msc.mapper.PersonMapper;
 import com.rtravez.msc.repository.IPersonRepository;
@@ -40,27 +42,53 @@ public class PersonService implements IPersonService {
 
     @Override
     public PersonResponse save(PersonRequest request) throws ExceptionManager {
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+        PersonEntity person = personMapper.toEntity(request);
+        person.setStatus(request.getStatus() == null ? Boolean.TRUE : request.getStatus());
+        return personMapper.toResponse(personRepository.save(person));
     }
 
     @Override
     public PersonResponse update(PersonRequest request) throws ExceptionManager {
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+        return personRepository.findById(Objects.requireNonNull(request.getPersonId()))
+                .map(person -> updatePerson(person, request))
+                .map(personRepository::save)
+                .map(personMapper::toResponse)
+                .orElseThrow(() -> new ExceptionManager.NotFoundException("La persona no existe"));
     }
 
     @Override
     public Optional<PersonResponse> findById(Long id) throws ExceptionManager {
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        return personRepository.findById(Objects.requireNonNull(id))
+                .filter(person -> Boolean.TRUE.equals(person.getStatus()))
+                .map(personMapper::toResponse);
     }
 
     @Override
     public List<PersonResponse> findAll() throws ExceptionManager {
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        return personRepository.findAll().stream()
+                .filter(person -> Boolean.TRUE.equals(person.getStatus()))
+                .map(personMapper::toResponse)
+                .toList();
     }
 
     @Override
     public void deleteById(Long id) throws ExceptionManager {
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+        personRepository.findById(Objects.requireNonNull(id))
+                .ifPresent(person -> personRepository.deleteById(
+                        Objects.requireNonNull(person.getPersonId())));
+    }
+
+    private PersonEntity updatePerson(PersonEntity person, PersonRequest request) {
+        person.setIdentification(request.getIdentification());
+        person.setName(request.getName());
+        person.setLastname(request.getLastname());
+        person.setAddress(request.getAddress());
+        person.setTelephone(request.getTelephone());
+        person.setGender(request.getGender());
+        person.setAge(request.getAge());
+        person.setStatus(request.getStatus() == null ? person.getStatus() : request.getStatus());
+        person.setLastModifiedHost(request.getLastModifiedHost());
+        return person;
     }
 
 }
