@@ -3,8 +3,8 @@ package com.rtravez.msc.controller;
 import com.rtravez.msc.dto.BaseResponseDto;
 import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.dto.response.UserResponse;
-import com.rtravez.msc.service.IUserService;
-import com.rtravez.msc.service.IPersonService;
+import com.rtravez.msc.service.UserServiceImpl;
+import com.rtravez.msc.service.PersonServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -32,10 +32,10 @@ import java.util.List;
 @Slf4j
 public class UserController {
 
-    private final IUserService userService;
-    private final IPersonService personService;
+    private final UserServiceImpl userService;
+    private final PersonServiceImpl personService;
 
-    public UserController(IUserService userService, IPersonService personService) {
+    public UserController(UserServiceImpl userService, PersonServiceImpl personService) {
         this.userService = userService;
         this.personService = personService;
     }

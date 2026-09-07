@@ -14,7 +14,7 @@ import java.util.Optional;
  * @author renetravez
  * @version $1.0$
  */
-public interface IUserService {
+public interface UserService {
 
     /**
      * Find user by username

@@ -14,8 +14,8 @@ import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 import com.rtravez.msc.mapper.UserMapper;
-import com.rtravez.msc.repository.IPersonRepository;
-import com.rtravez.msc.repository.IUserRepository;
+import com.rtravez.msc.repository.PersonRepositoryImpl;
+import com.rtravez.msc.repository.UserRepositoryImpl;
 import com.rtravez.msc.web.ClientIpProvider;
 
 import lombok.RequiredArgsConstructor;
@@ -28,10 +28,10 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @RequiredArgsConstructor
-public class UserService implements IUserService {
+public class UserServiceImpl implements UserService {
 
-    private final IUserRepository userRepository;
-    private final IPersonRepository personRepository;
+    private final UserRepositoryImpl userRepository;
+    private final PersonRepositoryImpl personRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ClientIpProvider clientIpProvider;
     private final UserMapper userMapper;

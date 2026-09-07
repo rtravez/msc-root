@@ -13,7 +13,7 @@ import com.rtravez.msc.exception.ExceptionManager;
  * @author renetravez
  * @version $1.0$
  */
-public interface IPersonService {
+public interface PersonService {
 
     PersonResponse save(PersonRequest request) throws ExceptionManager;
 

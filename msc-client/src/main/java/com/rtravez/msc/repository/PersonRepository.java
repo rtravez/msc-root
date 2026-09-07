@@ -11,8 +11,7 @@ import com.rtravez.msc.exception.ExceptionManager;
  * @author renetravez
  * @version $1.0$
  */
-@NoRepositoryBean
-public interface IPersonRepository extends IBaseRepository<PersonEntity, Long> {
+public interface PersonRepository extends BaseRepository<PersonEntity, Long> {
 
     /**
      * Find person by identification

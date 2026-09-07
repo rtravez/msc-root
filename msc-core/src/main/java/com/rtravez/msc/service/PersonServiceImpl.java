@@ -11,7 +11,7 @@ import com.rtravez.msc.dto.response.PersonResponse;
 import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 import com.rtravez.msc.mapper.PersonMapper;
-import com.rtravez.msc.repository.IPersonRepository;
+import com.rtravez.msc.repository.PersonRepositoryImpl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class PersonService implements IPersonService {
+public class PersonServiceImpl implements PersonService {
 
-    private final IPersonRepository personRepository;
+    private final PersonRepositoryImpl personRepository;
     private final PersonMapper personMapper;
 
     @Override

@@ -15,8 +15,8 @@ import static com.rtravez.msc.entity.QPersonEntity.personEntity;
 
 @Slf4j
 @Repository
-public class PersonRepository extends BaseRepository<PersonEntity, Long> implements IPersonRepository {
-    public PersonRepository(EntityManager em) {
+public class PersonRepositoryImpl extends BaseRepositoryImpl<PersonEntity, Long> implements PersonRepository {
+    public PersonRepositoryImpl(EntityManager em) {
         super(PersonEntity.class, em);
     }
 

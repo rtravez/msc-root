@@ -2,8 +2,6 @@ package com.rtravez.msc.repository;
 
 import java.util.Optional;
 
-import org.springframework.data.repository.NoRepositoryBean;
-
 import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
@@ -14,8 +12,7 @@ import com.rtravez.msc.exception.ExceptionManager;
  * @author renetravez
  * @version $1.0$
  */
-@NoRepositoryBean 
-public interface IUserRepository extends IBaseRepository<UserEntity, Long> {
+public interface UserRepository extends BaseRepository<UserEntity, Long> {
 
     /**
      * Find user by username

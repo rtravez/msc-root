@@ -1,7 +1,7 @@
 package com.rtravez.msc.controller.common;
 
 import com.rtravez.msc.dto.BaseResponseDto;
-import com.rtravez.msc.service.common.IValidationService;
+import com.rtravez.msc.service.common.ValidationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class ValidationController {
 
-	private final IValidationService service;
+	private final ValidationServiceImpl service;
 
-	public ValidationController(IValidationService service) {
+	public ValidationController(ValidationServiceImpl service) {
 		this.service = service;
 	}
 

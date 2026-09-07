@@ -15,11 +15,11 @@ import static com.rtravez.msc.entity.QPersonEntity.personEntity;
 
 @Slf4j
 @Repository
-public class UserRepository extends BaseRepository<UserEntity, Long> implements IUserRepository {
+public class UserRepositoryImpl extends BaseRepositoryImpl<UserEntity, Long> implements UserRepository {
     /**
      * Constructor
      */
-    public UserRepository(EntityManager em) {
+    public UserRepositoryImpl(EntityManager em) {
         super(UserEntity.class, em);
     }
 
