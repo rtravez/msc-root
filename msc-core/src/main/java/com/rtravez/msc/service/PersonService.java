@@ -40,31 +40,26 @@ public class PersonService implements IPersonService {
 
     @Override
     public PersonResponse save(PersonRequest request) throws ExceptionManager {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'save'");
     }
 
     @Override
     public PersonResponse update(PersonRequest request) throws ExceptionManager {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
     @Override
     public Optional<PersonResponse> findById(Long id) throws ExceptionManager {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
     public List<PersonResponse> findAll() throws ExceptionManager {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'findAll'");
     }
 
     @Override
     public void deleteById(Long id) throws ExceptionManager {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
     }
 
