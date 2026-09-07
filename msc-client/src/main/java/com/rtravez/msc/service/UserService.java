@@ -43,7 +43,7 @@ public interface UserService {
      * @return
      * @throws ExceptionManager
      */
-    UserResponse update(UserRequest request) throws ExceptionManager;
+    UserResponse update(Long id, UserRequest request) throws ExceptionManager;
 
     /**
      * Find user all
@@ -69,5 +69,7 @@ public interface UserService {
      * @return
      * @throws ExceptionManager
      */
-    UserResponse findUserByIdentification(UserRequest request) throws ExceptionManager;
+    UserResponse findUserById(Long id) throws ExceptionManager;
+
+    UserResponse findUserByIdentification(String identification) throws ExceptionManager;
 }

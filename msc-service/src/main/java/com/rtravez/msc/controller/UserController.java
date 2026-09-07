@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rtravez.msc.dto.BaseResponseDto;
@@ -67,11 +68,18 @@ public class UserController {
      * @return
      */
     @Secured({"ROLE_ADMIN"})
-    @PostMapping(path = "findUserByIdentification")
+    @GetMapping(params = "identification")
     @Operation(summary = "Find user by identification")
-    public ResponseEntity<UserResponse> findUserByIdentification(@Valid @RequestBody UserRequest request) {
-        UserResponse response = this.userService.findUserByIdentification(request);
+    public ResponseEntity<UserResponse> findUserByIdentification(@RequestParam String identification) {
+        UserResponse response = this.userService.findUserByIdentification(identification);
         return ResponseEntity.ok(response);
+    }
+
+    @Secured({"ROLE_ADMIN"})
+    @GetMapping(path = "/{id}")
+    @Operation(summary = "Find User by id")
+    public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.findUserById(id));
     }
 
     /**
@@ -99,10 +107,10 @@ public class UserController {
      * @return
      */
     @Secured({"ROLE_ADMIN"})
-    @PutMapping
+    @PutMapping(path = "/{id}")
     @Operation(summary = "Update User")
-    public ResponseEntity<BaseResponseDto<Object>> update(@Valid @RequestBody UserRequest request) {
-        UserResponse response = userService.update(request);
+    public ResponseEntity<BaseResponseDto<Object>> update(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+        UserResponse response = userService.update(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(response).message("Usuario actualizado con \u00E9xito").build());
     }
 

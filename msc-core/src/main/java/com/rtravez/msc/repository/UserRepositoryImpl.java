@@ -41,12 +41,12 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<UserEntity, Long> imp
     }
 
     @Override
-    public Optional<UserEntity> findUserByIdentification(UserRequest request) throws ExceptionManager {
+    public Optional<UserEntity> findUserByIdentification(String identification) throws ExceptionManager {
         try {
             return Optional.ofNullable(queryFactory.selectFrom(userEntity)
                     .innerJoin(userEntity.person, personEntity)
                     .fetchJoin()
-                    .where(userEntity.person.identification.eq(request.getIdentification())
+                    .where(userEntity.person.identification.eq(identification)
                             .and(userEntity.status.isTrue()))
                     .fetchFirst());
         } catch (Exception e) {

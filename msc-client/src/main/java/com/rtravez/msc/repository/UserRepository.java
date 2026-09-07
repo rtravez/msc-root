@@ -33,7 +33,7 @@ public interface UserRepository extends BaseRepository<UserEntity, Long> {
      * @return
      * @throws ExceptionManager
      */
-    Optional<UserEntity> findUserByIdentification(UserRequest request) throws ExceptionManager;
+    Optional<UserEntity> findUserByIdentification(String identification) throws ExceptionManager;
 
     Page<UserEntity> findAllByStatusTrue(Pageable pageable) throws ExceptionManager;
 }

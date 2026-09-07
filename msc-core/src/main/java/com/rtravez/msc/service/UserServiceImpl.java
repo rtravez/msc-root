@@ -68,8 +68,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserResponse update(UserRequest request) throws ExceptionManager {
-        Optional<UserEntity> user = userRepository.findUserByIdentification(request);
+    public UserResponse update(Long id, UserRequest request) throws ExceptionManager {
+        Optional<UserEntity> user = userRepository.findById(id)
+                .filter(value -> Boolean.TRUE.equals(value.getStatus()));
 
         return user.map(value -> this.updateUser(value, request))
                 .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
@@ -135,8 +136,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse findUserByIdentification(UserRequest request) throws ExceptionManager {
-        return userRepository.findUserByIdentification(request)
+    @Transactional(readOnly = true)
+    public UserResponse findUserById(Long id) throws ExceptionManager {
+        return userRepository.findById(id)
+                .filter(value -> Boolean.TRUE.equals(value.getStatus()))
+                .map(userMapper::toResponse)
+                .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserResponse findUserByIdentification(String identification) throws ExceptionManager {
+        return userRepository.findUserByIdentification(identification)
                 .map(userMapper::toResponse)
                 .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
     }
