@@ -1,23 +1,23 @@
 package com.rtravez.msc.repository;
 
-import com.rtravez.msc.dto.request.UserRequest;
-import com.rtravez.msc.entity.UserEntity;
-import com.rtravez.msc.exception.ExceptionManager;
-import lombok.extern.slf4j.Slf4j;
+import static com.rtravez.msc.entity.QPersonEntity.personEntity;
+import static com.rtravez.msc.entity.QUserEntity.userEntity;
 
-import org.springframework.stereotype.Repository;
-import jakarta.persistence.EntityManager;
-
-import java.util.Optional;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import com.querydsl.jpa.JPQLQuery;
+import org.springframework.stereotype.Repository;
 
-import static com.rtravez.msc.entity.QUserEntity.userEntity;
-import static com.rtravez.msc.entity.QPersonEntity.personEntity;
+import com.querydsl.jpa.JPQLQuery;
+import com.rtravez.msc.entity.UserEntity;
+import com.rtravez.msc.exception.ExceptionManager;
+
+import jakarta.persistence.EntityManager;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Repository
@@ -72,7 +72,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<UserEntity, Long> imp
                     .where(userEntity.status.isTrue())
                     .fetchOne();
 
-            return new PageImpl<>(content, pageable, total == null ? 0 : total);
+            return new PageImpl<>(Objects.requireNonNull(content), pageable, total == null ? 0 : total);
         } catch (Exception e) {
             log.error("findAllByStatusTrue: ", e);
             throw new ExceptionManager.FindingException("Error al buscar los registros");

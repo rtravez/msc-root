@@ -1,5 +1,6 @@
 package com.rtravez.msc.service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserResponse update(Long id, UserRequest request) throws ExceptionManager {
-        Optional<UserEntity> user = userRepository.findById(id)
+        Optional<UserEntity> user = userRepository.findById(Objects.requireNonNull(id))
                 .filter(value -> Boolean.TRUE.equals(value.getStatus()));
 
         return user.map(value -> this.updateUser(value, request))
@@ -87,11 +88,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public Long deleteUserById(Long id) throws ExceptionManager {
-        Optional<UserEntity> user = userRepository.findById(id);
+        Optional<UserEntity> user = userRepository.findById(Objects.requireNonNull(id));
 
         if (user.isPresent()) {
-            userRepository.deleteById(user.get().getUserId());
-            personRepository.deleteById(user.get().getPerson().getPersonId());
+            userRepository.deleteById(Objects.requireNonNull(user.get().getUserId()));
+            personRepository.deleteById(Objects.requireNonNull(user.get().getPerson().getPersonId()));
             return 1L;
         }
         return 0L;
@@ -114,7 +115,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         PersonEntity person = getPerson(user, request);
-        personRepository.save(person);
+        personRepository.save(Objects.requireNonNull(person));
 
         return userMapper.toResponse(user);
 
@@ -138,7 +139,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse findUserById(Long id) throws ExceptionManager {
-        return userRepository.findById(id)
+        return userRepository.findById(Objects.requireNonNull(id))
                 .filter(value -> Boolean.TRUE.equals(value.getStatus()))
                 .map(userMapper::toResponse)
                 .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
@@ -147,7 +148,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse findUserByIdentification(String identification) throws ExceptionManager {
-        return userRepository.findUserByIdentification(identification)
+        return userRepository.findUserByIdentification(Objects.requireNonNull(identification))
                 .map(userMapper::toResponse)
                 .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
     }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,7 +35,6 @@ public class SpringSecurityConfig {
 	};
 
 	@Bean
-	@Order(1)
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(authorize -> authorize
 				.requestMatchers(PUBLIC_ENDPOINTS).permitAll()

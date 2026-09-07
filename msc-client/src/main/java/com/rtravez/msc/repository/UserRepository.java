@@ -5,7 +5,6 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 
