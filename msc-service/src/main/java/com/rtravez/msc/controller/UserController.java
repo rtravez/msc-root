@@ -25,6 +25,7 @@ import com.rtravez.msc.service.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,15 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/users")
 @Validated
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
-    private final PersonService personService;
-
-    public UserController(UserService userService, PersonService personService) {
-        this.userService = userService;
-        this.personService = personService;
-    }
+    private final PersonService personService;   
 
     /**
      * Find user all
