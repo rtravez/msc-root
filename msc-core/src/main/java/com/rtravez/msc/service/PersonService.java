@@ -1,10 +1,13 @@
 package com.rtravez.msc.service;
 
-import com.rtravez.msc.entity.PersonEntity;
-import com.rtravez.msc.exception.ExceptionManager;
-import com.rtravez.msc.repository.IPersonRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import com.rtravez.msc.exception.ExceptionManager;
+import com.rtravez.msc.mapper.PersonMapper;
+import com.rtravez.msc.repository.IPersonRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * <b> Description de la class, interface o enumeration. </b>
@@ -14,19 +17,20 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class PersonService extends GenericService<PersonEntity, Long, IPersonRepository> implements IPersonService {
+@RequiredArgsConstructor
+public abstract class PersonService implements IPersonService {
 
-    public PersonService(IPersonRepository repository) {
-        super(repository);
-    }
+    private final IPersonRepository personRepository;
+    private final PersonMapper personMapper;
 
     @Override
     public Boolean exist(String identification) throws ExceptionManager {
         try {
-            return repository.exist(identification);
+            return personRepository.exist(identification);
         } catch (ExceptionManager e) {
             log.error("exist: {0}", e);
             throw new ExceptionManager.FindingException("Error al buscar el registro");
         }
     }
+
 }

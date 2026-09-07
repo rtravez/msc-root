@@ -3,7 +3,9 @@ package com.rtravez.msc.mapper;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.dto.response.UserResponse;
+import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.entity.UserEntity;
 
 /**
@@ -31,5 +33,18 @@ public interface UserMapper {
     @Mapping(target = "gender", source = "userEntity.person.gender")
     @Mapping(target = "age", source = "userEntity.person.age")
     UserResponse userEntityToUserResponse(UserEntity userEntity);
+
+    /**
+     * Maps UserRequest to PersonEntity.
+     * Extracts only the person-related fields from user request.
+     * Service layer is responsible for setting audit/metadata fields.
+     *
+     * @param userRequest the user request DTO
+     * @return the person entity with populated person fields
+     */
+    @Mapping(target = "personId", ignore = true)
+    @Mapping(target = "users", ignore = true)
+    @Mapping(target = "accounts", ignore = true)
+    PersonEntity userRequestToPersonEntity(UserRequest userRequest);
 
 }

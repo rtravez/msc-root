@@ -4,6 +4,8 @@ import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
 
@@ -14,13 +16,13 @@ import static com.rtravez.msc.entity.QPersonEntity.personEntity;
 
 @Slf4j
 @Repository
-public class UserRepository extends GenericRepository<UserEntity, Long> implements IUserRepository {
+public class UserRepository extends SimpleJpaRepository<UserEntity, Long> implements IUserRepository {
 
     /**
      * Constructor
      */
-    public UserRepository(EntityManager entityManager) {
-        super(UserEntity.class, entityManager);
+    public UserRepository(EntityManager em) {
+        super(UserEntity.class, em);
     }
 
     @Override

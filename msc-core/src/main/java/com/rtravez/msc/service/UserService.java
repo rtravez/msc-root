@@ -1,5 +1,13 @@
 package com.rtravez.msc.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.jspecify.annotations.NonNull;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.dto.response.UserResponse;
 import com.rtravez.msc.entity.PersonEntity;
@@ -10,13 +18,8 @@ import com.rtravez.msc.mapper.UserRequestToPersonMapper;
 import com.rtravez.msc.repository.IPersonRepository;
 import com.rtravez.msc.repository.IUserRepository;
 import com.rtravez.msc.web.ClientIpProvider;
-import org.jspecify.annotations.NonNull;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.Optional;
+import lombok.RequiredArgsConstructor;
 
 /**
  * <b> Description de la clase, interface o enumeration. </b>
@@ -25,38 +28,25 @@ import java.util.Optional;
  * @version $1.0$
  */
 @Service
-public class UserService extends GenericService<UserEntity, Long, IUserRepository> implements IUserService {
-    
+@RequiredArgsConstructor
+public class UserService implements IUserService {
+
+    private final IUserRepository userRepository;
     private final IPersonRepository personRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final ClientIpProvider clientIpProvider;
     private final UserMapper userMapper;
-    private final UserRequestToPersonMapper userRequestToPersonMapper;
-
-    protected UserService(IUserRepository repository,
-            IPersonRepository personRepository,
-            BCryptPasswordEncoder passwordEncoder,
-            ClientIpProvider clientIpProvider,
-            UserMapper userMapper,
-            UserRequestToPersonMapper userRequestToPersonMapper) {
-        super(repository);
-        this.passwordEncoder = passwordEncoder;
-        this.personRepository = personRepository;
-        this.clientIpProvider = clientIpProvider;
-        this.userMapper = userMapper;
-        this.userRequestToPersonMapper = userRequestToPersonMapper;
-    }
 
     @Override
     public Optional<UserResponse> findUserByUsername(String username) {
-        return repository.findUserByUsername(username).map(userMapper::userEntityToUserResponse);
+        return userRepository.findUserByUsername(username).map(userMapper::userEntityToUserResponse);
     }
 
     @Override
     @Transactional
     public UserResponse processSaveUser(UserRequest request) throws ExceptionManager {
         // Map request to PersonEntity
-        PersonEntity person = userRequestToPersonMapper.userRequestToPersonEntity(request);
+        PersonEntity person = userMapper.userRequestToPersonEntity(request);
         person.setStatus(request.getStatus());
         person.setCreatedHost(clientIpProvider.getCurrentIp());
         personRepository.save(person);
@@ -69,7 +59,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
                 .build();
         user.setStatus(request.getStatus());
         user.setCreatedHost(clientIpProvider.getCurrentIp());
-        super.save(user);
+        userRepository.save(user);
 
         // Map UserEntity to UserResponse
         return userMapper.userEntityToUserResponse(user);
@@ -78,7 +68,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     @Override
     @Transactional
     public UserResponse processUpdateUser(UserRequest request) throws ExceptionManager {
-        Optional<UserEntity> user = repository.findUserByIdentification(request);
+        Optional<UserEntity> user = userRepository.findUserByIdentification(request);
 
         return user.map(value -> this.updateUser(value, request))
                 .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
@@ -87,7 +77,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     @Override
     @Transactional(readOnly = true)
     public List<UserResponse> findUserAll() throws ExceptionManager {
-        return repository.findAll().stream()
+        return userRepository.findAll().stream()
                 .filter(it -> Boolean.TRUE.equals(it.getStatus()))
                 .map(userMapper::userEntityToUserResponse)
                 .toList();
@@ -96,10 +86,10 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
     @Override
     @Transactional
     public Long deleteUserById(Long id) throws ExceptionManager {
-        Optional<UserEntity> user = repository.findById(id);
+        Optional<UserEntity> user = userRepository.findById(id);
 
         if (user.isPresent()) {
-            repository.deleteById(user.get().getUserId());
+            userRepository.deleteById(user.get().getUserId());
             personRepository.deleteById(user.get().getPerson().getPersonId());
             return 1L;
         }
@@ -120,7 +110,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
 
         user.setStatus(request.getStatus());
         user.setLastModifiedHost(clientIpProvider.getCurrentIp());
-        repository.save(user);
+        userRepository.save(user);
 
         PersonEntity person = getPerson(user, request);
         personRepository.save(person);
@@ -146,7 +136,7 @@ public class UserService extends GenericService<UserEntity, Long, IUserRepositor
 
     @Override
     public UserResponse findUserByIdentification(UserRequest request) throws ExceptionManager {
-        return repository.findUserByIdentification(request)
+        return userRepository.findUserByIdentification(request)
                 .map(userMapper::userEntityToUserResponse)
                 .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
     }

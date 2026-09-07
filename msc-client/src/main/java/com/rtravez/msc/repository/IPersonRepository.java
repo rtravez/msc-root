@@ -2,6 +2,8 @@ package com.rtravez.msc.repository;
 
 import com.rtravez.msc.entity.PersonEntity;
 import com.rtravez.msc.exception.ExceptionManager;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
 /**
@@ -11,7 +13,7 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @version $1.0$
  */
 @NoRepositoryBean
-public interface IPersonRepository extends IGenericRepository<PersonEntity, Long> {
+public interface IPersonRepository extends JpaRepository<PersonEntity, Long> {
 
     /**
      * Find person by identification

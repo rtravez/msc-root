@@ -6,6 +6,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
 
@@ -14,7 +15,7 @@ import static com.rtravez.msc.entity.QPersonEntity.personEntity;
 
 @Slf4j
 @Repository
-public class PersonRepository extends GenericRepository<PersonEntity, Long> implements IPersonRepository {
+public class PersonRepository extends SimpleJpaRepository<PersonEntity, Long> implements IPersonRepository {
 
     public PersonRepository(EntityManager entityManager) {
         super(PersonEntity.class, entityManager);
