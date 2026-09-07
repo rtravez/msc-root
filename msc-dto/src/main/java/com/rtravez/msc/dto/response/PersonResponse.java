@@ -1,4 +1,6 @@
-package com.rtravez.msc.dto;
+package com.rtravez.msc.dto.response;
+
+import com.rtravez.msc.dto.BaseDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,7 +20,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PersonDto extends BaseDto {
+public class PersonResponse extends BaseDto {
     private Long personId;
     private String identification;
     private String name;

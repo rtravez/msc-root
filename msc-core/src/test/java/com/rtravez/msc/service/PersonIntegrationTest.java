@@ -1,7 +1,7 @@
 package com.rtravez.msc.service;
 
 import com.github.javafaker.Faker;
-import com.rtravez.msc.dto.PersonDto;
+import com.rtravez.msc.dto.response.PersonResponse;
 import com.rtravez.msc.entity.PersonEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -26,7 +26,7 @@ class PersonIntegrationTest {
 
     PersonEntity person1;
     PersonEntity person2;
-    PersonDto personDto;
+    PersonResponse personDto;
     private final Faker faker = new Faker();
 
     @Autowired
@@ -49,7 +49,7 @@ class PersonIntegrationTest {
                 .lastname(faker.name().lastName())
                 .identification(faker.number().digits(10)).build());
 
-        personDto = PersonDto.builder()
+        personDto = PersonResponse.builder()
                 .name(faker.name().firstName())
                 .lastname(faker.name().lastName())
                 .identification(faker.number().digits(10)).build();
@@ -57,10 +57,10 @@ class PersonIntegrationTest {
 
     @Test
     void testFindPersonList() {
-        List<PersonDto> personEntityList = new ArrayList<>();
+        List<PersonResponse> personEntityList = new ArrayList<>();
         List<PersonEntity> entities = personService.findAll();
         entities.forEach(entity -> {
-            PersonDto dto = modelMapper.map(entity, PersonDto.class);
+            PersonResponse dto = modelMapper.map(entity, PersonResponse.class);
             personEntityList.add(dto);
         });
 
@@ -70,7 +70,7 @@ class PersonIntegrationTest {
     @Test
     void testFindPersonById() {
         Optional<PersonEntity> entity = personService.findById(person1.getPersonId());
-        PersonDto personVo = modelMapper.map(entity.get(), PersonDto.class);
+        PersonResponse personVo = modelMapper.map(entity.get(), PersonResponse.class);
         assertEquals(person1.getPersonId(), personVo.getPersonId());
     }
 
@@ -89,7 +89,7 @@ class PersonIntegrationTest {
 
     @Test
     void testUpdate() {
-        PersonDto personUpdate = PersonDto.builder()
+        PersonResponse personUpdate = PersonResponse.builder()
                 .personId(235L).name("Juan")
                 .lastname(faker.name().lastName())
                 .identification(faker.number().digits(10)).build();
