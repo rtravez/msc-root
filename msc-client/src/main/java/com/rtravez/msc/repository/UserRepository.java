@@ -2,6 +2,9 @@ package com.rtravez.msc.repository;
 
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.rtravez.msc.dto.request.UserRequest;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
@@ -31,4 +34,6 @@ public interface UserRepository extends BaseRepository<UserEntity, Long> {
      * @throws ExceptionManager
      */
     Optional<UserEntity> findUserByIdentification(UserRequest request) throws ExceptionManager;
+
+    Page<UserEntity> findAllByStatusTrue(Pageable pageable) throws ExceptionManager;
 }

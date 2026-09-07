@@ -5,8 +5,10 @@ import com.rtravez.msc.dto.response.UserResponse;
 import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 
-import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * <b> Description de la clase, interface o enumeration. </b>
@@ -49,7 +51,7 @@ public interface UserService {
      * @return
      * @throws ExceptionManager
      */
-    List<UserResponse> findUserAll() throws ExceptionManager;
+    Page<UserResponse> findUserAll(Pageable pageable) throws ExceptionManager;
 
     /**
      * Delete user by id

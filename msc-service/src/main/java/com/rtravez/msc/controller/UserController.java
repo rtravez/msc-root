@@ -9,6 +9,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,13 +50,13 @@ public class UserController {
      */
     @GetMapping
     @Operation(summary = "Find User")
-    public ResponseEntity<BaseResponseDto<List<UserResponse>>> findUserAll() {
-        List<UserResponse> userResponses = userService.findUserAll();
+    public ResponseEntity<BaseResponseDto<Page<UserResponse>>> findUserAll(@PageableDefault(size = 20) Pageable pageable) {
+        Page<UserResponse> userResponses = userService.findUserAll(pageable);
         if (userResponses.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<List<UserResponse>>builder().code(HttpStatus.OK.value()).message("No existen usuarios").build());
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<Page<UserResponse>>builder().code(HttpStatus.OK.value()).message("No existen usuarios").build());
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<List<UserResponse>>builder().code(HttpStatus.OK.value())
+        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<Page<UserResponse>>builder().code(HttpStatus.OK.value())
                 .data(userResponses).message("Usuarios encontrados con \u00E9xito").build());
     }
 

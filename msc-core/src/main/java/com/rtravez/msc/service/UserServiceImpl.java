@@ -1,9 +1,11 @@
 package com.rtravez.msc.service;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.jspecify.annotations.NonNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,11 +77,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserResponse> findUserAll() throws ExceptionManager {
-        return userRepository.findAll().stream()
-                .filter(it -> Boolean.TRUE.equals(it.getStatus()))
-                .map(userMapper::toResponse)
-                .toList();
+    public Page<UserResponse> findUserAll(Pageable pageable) throws ExceptionManager {
+        int pageSize = Math.min(pageable.getPageSize(), 100);
+        Pageable boundedPageable = PageRequest.of(pageable.getPageNumber(), pageSize);
+        return userRepository.findAllByStatusTrue(boundedPageable).map(userMapper::toResponse);
     }
 
     @Override

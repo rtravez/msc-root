@@ -9,6 +9,12 @@ import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;
 
 import java.util.Optional;
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import com.querydsl.jpa.JPQLQuery;
 
 import static com.rtravez.msc.entity.QUserEntity.userEntity;
 import static com.rtravez.msc.entity.QPersonEntity.personEntity;
@@ -46,6 +52,30 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<UserEntity, Long> imp
         } catch (Exception e) {
             log.error("findUserByIdentification: ", e);
             throw new ExceptionManager.FindingException("Error al buscar el registro");
+        }
+    }
+
+    @Override
+    public Page<UserEntity> findAllByStatusTrue(Pageable pageable) throws ExceptionManager {
+        try {
+            JPQLQuery<UserEntity> contentQuery = queryFactory.selectFrom(userEntity)
+                    .innerJoin(userEntity.person, personEntity)
+                    .fetchJoin()
+                    .where(userEntity.status.isTrue())
+                    .orderBy(userEntity.userId.asc())
+                    .offset(pageable.getOffset())
+                    .limit(pageable.getPageSize());
+
+            List<UserEntity> content = contentQuery.fetch();
+            Long total = queryFactory.select(userEntity.userId.count())
+                    .from(userEntity)
+                    .where(userEntity.status.isTrue())
+                    .fetchOne();
+
+            return new PageImpl<>(content, pageable, total == null ? 0 : total);
+        } catch (Exception e) {
+            log.error("findAllByStatusTrue: ", e);
+            throw new ExceptionManager.FindingException("Error al buscar los registros");
         }
     }
 }
