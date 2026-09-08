@@ -42,4 +42,28 @@ class UserControllerValidationTest {
                 .andExpect(jsonPath("$.detail").exists())
                 .andExpect(jsonPath("$.errors").exists());
     }
+
+    @Test
+    void save_whenRequestFieldsAreInvalid_returnsProblemDetailWithFieldErrors() throws Exception {
+        String invalidJson = """
+                {
+                  "identification": "",
+                  "name": "Ana",
+                  "lastname": "",
+                  "password": "123",
+                  "username": ""
+                }
+                """;
+
+        mockMvc.perform(post("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(invalidJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").value("Error de validación en los campos"))
+                .andExpect(jsonPath("$.errors").isArray())
+                .andExpect(jsonPath("$.errors[?(@ =~ /^identification: .*/)]").exists())
+                .andExpect(jsonPath("$.errors[?(@ =~ /^lastname: .*/)]").exists())
+                .andExpect(jsonPath("$.errors[?(@ =~ /^password: .*/)]").exists())
+                .andExpect(jsonPath("$.errors[?(@ =~ /^username: .*/)]").exists());
+    }
 }
