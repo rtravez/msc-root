@@ -22,7 +22,7 @@ public interface UserMapper {
      * Maps UserEntity to UserResponse.
      * Includes nested Person data extraction.
      *
-     * @param userEntity the user entity
+     * @param entity the user entity
      * @return the user response DTO
      */
     @Mapping(target = "name", source = "person.name")
@@ -32,19 +32,19 @@ public interface UserMapper {
     @Mapping(target = "telephone", source = "person.telephone")
     @Mapping(target = "gender", source = "person.gender")
     @Mapping(target = "age", source = "person.age")
-    UserResponse toResponse(UserEntity userEntity);
+    UserResponse toResponse(UserEntity entity);
 
     /**
      * Maps UserRequest to PersonEntity.
      * Extracts only the person-related fields from the user request.
      * The service layer is responsible for setting audit/metadata fields.
      *
-     * @param userRequest the user request DTO
+     * @param request the user request DTO
      * @return the person entity with populated person fields
      */
     @Mapping(target = "personId", ignore = true)
     @Mapping(target = "users", ignore = true)
     @Mapping(target = "accounts", ignore = true)
-    PersonEntity toEntity(UserRequest userRequest);
+    PersonEntity toEntity(UserRequest request);
 
 }
