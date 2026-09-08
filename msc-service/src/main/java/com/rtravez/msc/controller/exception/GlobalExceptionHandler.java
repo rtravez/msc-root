@@ -7,10 +7,12 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import jakarta.validation.ConstraintViolationException;
 import java.util.List;
@@ -40,11 +42,32 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ProblemDetail> handleValidationExceptions(MethodArgumentNotValidException ex) {
         log.error("Validation error: ", ex);
         List<String> errors = ex.getBindingResult()
-                .getFieldErrors()
+                .getAllErrors()
                 .stream()
-                .map(error -> error.getField() + ": " + error.getDefaultMessage()).toList();
+                .map(error -> {
+                    if (error instanceof org.springframework.validation.FieldError fieldError) {
+                        return fieldError.getField() + ": " + fieldError.getDefaultMessage();
+                    }
+                    return error.getDefaultMessage();
+                })
+                .toList();
 
         return problemDetail(HttpStatus.BAD_REQUEST, "Error de validación en los campos", errors);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ProblemDetail> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
+        log.warn("Malformed request body: {}", ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage());
+        String message = ex.getMostSpecificCause() != null ? ex.getMostSpecificCause().getMessage() : ex.getMessage();
+        return problemDetail(HttpStatus.BAD_REQUEST, "Error de validación en los campos",
+                List.of(message == null ? "El cuerpo de la solicitud no es válido" : message));
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ProblemDetail> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        log.warn("Argument type mismatch: {}", ex.getMessage());
+        return problemDetail(HttpStatus.BAD_REQUEST, "Error de validación en los campos",
+                List.of(ex.getName() + ": valor inválido para el tipo " + ex.getRequiredType()));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
