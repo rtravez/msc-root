@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +20,7 @@ import jakarta.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
 public class GlobalExceptionHandler {
 
@@ -40,7 +43,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ProblemDetail> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        log.error("Validation error: ", ex);
         List<String> errors = ex.getBindingResult()
                 .getAllErrors()
                 .stream()
@@ -52,6 +54,7 @@ public class GlobalExceptionHandler {
                 })
                 .toList();
 
+        log.warn("Validation error in fields: {}", errors);
         return problemDetail(HttpStatus.BAD_REQUEST, "Error de validación en los campos", errors);
     }
 

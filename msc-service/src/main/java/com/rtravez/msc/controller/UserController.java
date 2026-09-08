@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -81,20 +82,14 @@ public class UserController {
      */
     @Secured({"ROLE_ADMIN"})
     @GetMapping(path = "identification", params = "identification")
-    @Operation(summary = "Listar usuario por identificación",description = "Obtiene un usuario por su identificación")
+    @Operation(summary = "Listar usuario por identificación", description = "Obtiene un usuario por su identificación")
     @ApiResponse(responseCode = "200", description = "Usuario encontrado")
     @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
     @ApiResponse(responseCode = "403", description = "El token no tiene ROLE_ADMIN")
     public ResponseEntity<BaseResponseDto<UserResponse>> findUserByIdentification(
             @Parameter(description = "Número de identificación del usuario", required = true, in = ParameterIn.QUERY, example = "1712345678") @RequestParam String identification) {
-        UserResponse userResponse = this.userService.findUserByIdentification(identification);
-        if (userResponse == null || userResponse.getUserId() == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<UserResponse>builder()
-                    .code(HttpStatus.NOT_FOUND.value()).message("Usuario no encontrado").build());
-        }
-        return ResponseEntity.ok(BaseResponseDto.<UserResponse>builder().code(HttpStatus.OK.value()).data(userResponse)
-                .message("Usuario encontrado con \u00E9xito").build());
+        return getBaseResponseDtoResponseEntity(this.userService.findUserByIdentification(identification));
     }
 
     @Secured({"ROLE_ADMIN"})
@@ -106,13 +101,7 @@ public class UserController {
     @ApiResponse(responseCode = "403", description = "El token no tiene ROLE_ADMIN")
     public ResponseEntity<BaseResponseDto<UserResponse>> findUserById(
             @Parameter(description = "Identificador del usuario", required = true, example = "1") @PathVariable Long id) {
-        UserResponse userResponse = this.userService.findUserById(id);
-        if (userResponse == null || userResponse.getUserId() == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<UserResponse>builder()
-                    .code(HttpStatus.NOT_FOUND.value()).message("Usuario no encontrado").build());
-        }
-        return ResponseEntity.ok(BaseResponseDto.<UserResponse>builder().code(HttpStatus.OK.value()).data(userResponse)
-                .message("Usuario encontrado con \u00E9xito").build());
+        return getBaseResponseDtoResponseEntity(this.userService.findUserById(id));
     }
 
     /**
@@ -185,5 +174,15 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<Long>builder()
                     .code(HttpStatus.NOT_FOUND.value()).message("El usuario no existe").build());
         }
+    }
+
+    @NonNull
+    private ResponseEntity<BaseResponseDto<UserResponse>> getBaseResponseDtoResponseEntity(UserResponse response) {
+        if (response == null || response.getUserId() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<UserResponse>builder()
+                    .code(HttpStatus.NOT_FOUND.value()).message("Usuario no encontrado").build());
+        }
+        return ResponseEntity.ok(BaseResponseDto.<UserResponse>builder().code(HttpStatus.OK.value()).data(response)
+                .message("Usuario encontrado con \u00E9xito").build());
     }
 }
