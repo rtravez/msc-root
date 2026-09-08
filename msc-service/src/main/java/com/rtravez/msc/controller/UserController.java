@@ -74,7 +74,7 @@ public class UserController {
     /**
      * Find user by identification
      *
-     * @param request
+     * @param identification
      * @return
      */
     @Secured({ "ROLE_ADMIN" })

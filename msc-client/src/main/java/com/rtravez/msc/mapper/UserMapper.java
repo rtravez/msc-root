@@ -25,19 +25,19 @@ public interface UserMapper {
      * @param userEntity the user entity
      * @return the user response DTO
      */
-    @Mapping(target = "name", source = "userEntity.person.name")
-    @Mapping(target = "lastname", source = "userEntity.person.lastname")
-    @Mapping(target = "identification", source = "userEntity.person.identification")
-    @Mapping(target = "address", source = "userEntity.person.address")
-    @Mapping(target = "telephone", source = "userEntity.person.telephone")
-    @Mapping(target = "gender", source = "userEntity.person.gender")
-    @Mapping(target = "age", source = "userEntity.person.age")
+    @Mapping(target = "name", source = "person.name")
+    @Mapping(target = "lastname", source = "person.lastname")
+    @Mapping(target = "identification", source = "person.identification")
+    @Mapping(target = "address", source = "person.address")
+    @Mapping(target = "telephone", source = "person.telephone")
+    @Mapping(target = "gender", source = "person.gender")
+    @Mapping(target = "age", source = "person.age")
     UserResponse toResponse(UserEntity userEntity);
 
     /**
      * Maps UserRequest to PersonEntity.
-     * Extracts only the person-related fields from user request.
-     * Service layer is responsible for setting audit/metadata fields.
+     * Extracts only the person-related fields from the user request.
+     * The service layer is responsible for setting audit/metadata fields.
      *
      * @param userRequest the user request DTO
      * @return the person entity with populated person fields
