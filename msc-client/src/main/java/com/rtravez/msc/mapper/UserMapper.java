@@ -42,7 +42,6 @@ public interface UserMapper {
      * @param request the user request DTO
      * @return the person entity with populated person fields
      */
-    @Mapping(target = "personId", ignore = true)
     @Mapping(target = "users", ignore = true)
     @Mapping(target = "accounts", ignore = true)
     PersonEntity toEntity(UserRequest request);

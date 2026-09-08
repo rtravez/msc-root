@@ -10,7 +10,7 @@ import lombok.experimental.SuperBuilder;
 
 
 /**
- * Class VO for person process.
+ * Class VO for a person process.
  *
  * @author components on 2021/07/29.
  * @version 1.0

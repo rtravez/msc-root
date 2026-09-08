@@ -1,24 +1,20 @@
 package com.rtravez.msc.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-@Getter
-@Setter
-@Builder
-public class UserResponse {
+@Data
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+public class UserResponse extends PersonResponse {
 
     private Long userId;
     private String username;
-    private String name;
-    private String lastname;
-    private String address;
-    private String telephone;
-    private String identification;
-    private Character gender;
-    private Integer age;
-    private boolean status;
 
 
 }

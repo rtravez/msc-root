@@ -34,14 +34,4 @@ public interface PersonMapper {
     @Mapping(target = "accounts", ignore = true)
     PersonEntity toEntity(PersonRequest request);
 
-    /**
-     * Maps PersonDto to PersonEntity.
-     *
-     * @param response the person DTO
-     * @return the person entity
-     */
-    @Mapping(target = "users", ignore = true)
-    @Mapping(target = "accounts", ignore = true)
-    PersonEntity toEntity(PersonResponse response);
-
 }
