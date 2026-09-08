@@ -67,16 +67,23 @@ public class UserController {
     @Secured({"ROLE_ADMIN"})
     @GetMapping(params = "identification")
     @Operation(summary = "Find user by identification")
-    public ResponseEntity<UserResponse> findUserByIdentification(@RequestParam String identification) {
-        UserResponse response = this.userService.findUserByIdentification(identification);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<BaseResponseDto<UserResponse>> findUserByIdentification(@RequestParam String identification) {
+        UserResponse userResponse = this.userService.findUserByIdentification(identification);
+        if (userResponse == null || userResponse.getUserId() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<UserResponse>builder().code(HttpStatus.NOT_FOUND.value()).message("Usuario no encontrado").build());
+        }
+        return ResponseEntity.ok(BaseResponseDto.<UserResponse>builder().code(HttpStatus.OK.value()).data(userResponse).message("Usuario encontrado con \u00E9xito").build());
     }
 
     @Secured({"ROLE_ADMIN"})
     @GetMapping(path = "/{id}")
     @Operation(summary = "Find User by id")
-    public ResponseEntity<UserResponse> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.findUserById(id));
+    public ResponseEntity<BaseResponseDto<UserResponse>> findUserById(@PathVariable Long id) {
+        UserResponse userResponse = this.userService.findUserById(id);
+        if (userResponse == null || userResponse.getUserId() == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<UserResponse>builder().code(HttpStatus.NOT_FOUND.value()).message("Usuario no encontrado").build());
+        }
+        return ResponseEntity.ok(BaseResponseDto.<UserResponse>builder().code(HttpStatus.OK.value()).data(userResponse).message("Usuario encontrado con \u00E9xito").build());
     }
 
     /**
@@ -88,13 +95,13 @@ public class UserController {
     @Secured({"ROLE_ADMIN"})
     @PostMapping
     @Operation(summary = "Create User")
-    public ResponseEntity<BaseResponseDto<Object>> save(@Valid @RequestBody UserRequest request) {
+    public ResponseEntity<BaseResponseDto<UserResponse>> save(@Valid @RequestBody UserRequest request) {
         if (Boolean.TRUE.equals(this.personService.exist(request.getIdentification()))) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDto.builder().code(HttpStatus.CONFLICT.value()).message("El usuario ya existe").build());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDto.<UserResponse>builder().code(HttpStatus.CONFLICT.value()).message("El usuario ya existe").build());
         }
 
         UserResponse response = userService.save(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDto.builder().code(HttpStatus.CREATED.value()).data(response).message("Usuario creado con \u00E9xito").build());
+        return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDto.<UserResponse>builder().code(HttpStatus.CREATED.value()).data(response).message("Usuario creado con \u00E9xito").build());
     }
 
     /**
@@ -106,9 +113,9 @@ public class UserController {
     @Secured({"ROLE_ADMIN"})
     @PutMapping(path = "/{id}")
     @Operation(summary = "Update User")
-    public ResponseEntity<BaseResponseDto<Object>> update(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
+    public ResponseEntity<BaseResponseDto<UserResponse>> update(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
         UserResponse response = userService.update(id, request);
-        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(response).message("Usuario actualizado con \u00E9xito").build());
+        return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<UserResponse>builder().code(HttpStatus.OK.value()).data(response).message("Usuario actualizado con \u00E9xito").build());
     }
 
     /**
@@ -120,11 +127,11 @@ public class UserController {
     @Secured({"ROLE_ADMIN"})
     @DeleteMapping(path = "/{id}")
     @Operation(summary = "Delete User")
-    public ResponseEntity<BaseResponseDto<Object>> deleteById(@PathVariable Long id) {
+    public ResponseEntity<BaseResponseDto<Long>> deleteById(@PathVariable Long id) {
         if (this.userService.deleteUserById(id) >= 1) {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).message("Usuario eliminado con \u00E9xito").build());
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<Long>builder().code(HttpStatus.OK.value()).message("Usuario eliminado con \u00E9xito").build());
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.builder().code(HttpStatus.NOT_FOUND.value()).message("El usuario no existe").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<Long>builder().code(HttpStatus.NOT_FOUND.value()).message("El usuario no existe").build());
         }
     }
 }

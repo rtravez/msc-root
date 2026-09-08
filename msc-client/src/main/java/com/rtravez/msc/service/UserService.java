@@ -46,7 +46,7 @@ public interface UserService {
 
     /**
      * Find user all
-     *
+     * @param pageable
      * @return
      * @throws ExceptionManager
      */
