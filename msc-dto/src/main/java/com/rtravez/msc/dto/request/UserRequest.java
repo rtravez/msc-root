@@ -17,9 +17,9 @@ import lombok.experimental.SuperBuilder;
 public class UserRequest extends PersonRequest {
     private Long userId;
     @NotBlank
-    @Size(min = 8, max = 60)
+    @Size(min = 8, max = 60, message = "la contraseña debe tener entre 8 y 60 caracteres")
     private String password;
     @NotBlank
-    @Size(max = 20)
+    @Size(max = 20, message = "el nombre de usuario debe tener como máximo 20 caracteres")
     private String username;
 }
