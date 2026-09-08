@@ -2,6 +2,11 @@ package com.rtravez.msc.controller.common;
 
 import com.rtravez.msc.dto.BaseResponseDto;
 import com.rtravez.msc.service.common.ValidationServiceImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/validations")
 @Validated
 @Slf4j
+@Tag(name = "Validaciones", description = "Validación de identificaciones y RUC")
 public class ValidationController {
 
 	private final ValidationServiceImpl service;
@@ -24,13 +30,23 @@ public class ValidationController {
 	}
 
 	@GetMapping(path = "identification/{identification}")
-	public ResponseEntity<BaseResponseDto<Object>> validationIdentification(@PathVariable String identification) {
+	@Operation(summary = "Validar identificación", security = @SecurityRequirement(name = "bearerAuth"))
+	@ApiResponse(responseCode = "200", description = "Identificación validada correctamente")
+	@ApiResponse(responseCode = "401", description = "Token ausente o inválido")
+	public ResponseEntity<BaseResponseDto<Object>> validationIdentification(
+			@Parameter(description = "Número de identificación a validar", required = true, example = "1712345678")
+			@PathVariable String identification) {
 		return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value())
 				.data(service.validationIdentification(identification)).message("Identificación validada con \u00E9xito").build());
 	}
 
 	@GetMapping(path = "ruc/{ruc}")
-	public ResponseEntity<BaseResponseDto<Object>> validationRuc(@PathVariable String ruc) {
+	@Operation(summary = "Validar RUC", security = @SecurityRequirement(name = "bearerAuth"))
+	@ApiResponse(responseCode = "200", description = "RUC validado correctamente")
+	@ApiResponse(responseCode = "401", description = "Token ausente o inválido")
+	public ResponseEntity<BaseResponseDto<Object>> validationRuc(
+			@Parameter(description = "RUC a validar", required = true, example = "1790012345001")
+			@PathVariable String ruc) {
 		return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.builder().code(HttpStatus.OK.value()).data(service.validationRuc(ruc))
 				.message("Ruc validado con \u00E9xito").build());
 	}
