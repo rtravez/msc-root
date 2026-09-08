@@ -1,7 +1,21 @@
 package com.rtravez.msc.controller;
 
+import com.rtravez.msc.dto.BaseResponseDto;
+import com.rtravez.msc.dto.request.UserRequest;
+import com.rtravez.msc.dto.response.UserResponse;
+import com.rtravez.msc.service.PersonService;
+import com.rtravez.msc.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,23 +33,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.rtravez.msc.dto.BaseResponseDto;
-import com.rtravez.msc.dto.request.UserRequest;
-import com.rtravez.msc.dto.response.UserResponse;
-import com.rtravez.msc.service.PersonService;
-import com.rtravez.msc.service.UserService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.annotations.ParameterObject;
-
 /**
  * UserController
  */
@@ -45,6 +42,7 @@ import org.springdoc.core.annotations.ParameterObject;
 @Slf4j
 @RequiredArgsConstructor
 @Tag(name = "Usuarios", description = "Operaciones de administración de usuarios")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
 
     private final UserService userService;
@@ -55,13 +53,15 @@ public class UserController {
      *
      * @return
      */
+    @Secured({"ROLE_ADMIN"})
     @GetMapping
-    @Operation(summary = "Listar usuarios", description = "Obtiene los usuarios activos con paginación.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Listar usuarios", description = "Obtiene los usuarios activos con paginación.")
     @ApiResponse(responseCode = "200", description = "Usuarios consultados correctamente")
-    @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
-    @ApiResponse(responseCode = "403", description = "El token no tiene ROLE_ADMIN")
+    @ApiResponse(responseCode = "401", description = "Token ausente o inválido", content = @Content)
+    @ApiResponse(responseCode = "403", description = "El token no tiene ROLE_ADMIN", content = @Content)
     public ResponseEntity<BaseResponseDto<Page<UserResponse>>> findUserAll(
-            @ParameterObject @PageableDefault(size = 20) Pageable pageable) {
+            @Parameter(description = "Paginación y ordenamiento. Por defecto devuelve 20 registros por página.")
+            @PageableDefault(size = 20) Pageable pageable) {
         Page<UserResponse> userResponses = userService.findUserAll(pageable);
         if (userResponses.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<Page<UserResponse>>builder()
@@ -79,9 +79,9 @@ public class UserController {
      * @param identification
      * @return
      */
-    @Secured({ "ROLE_ADMIN" })
+    @Secured({"ROLE_ADMIN"})
     @GetMapping(params = "identification")
-    @Operation(summary = "Buscar usuario por identificación", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Buscar usuario por identificación")
     @ApiResponse(responseCode = "200", description = "Usuario encontrado")
     @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
@@ -97,9 +97,9 @@ public class UserController {
                 .message("Usuario encontrado con \u00E9xito").build());
     }
 
-    @Secured({ "ROLE_ADMIN" })
+    @Secured({"ROLE_ADMIN"})
     @GetMapping(path = "/{id}")
-    @Operation(summary = "Buscar usuario por ID", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Buscar usuario por id")
     @ApiResponse(responseCode = "200", description = "Usuario encontrado")
     @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
@@ -121,11 +121,11 @@ public class UserController {
      * @param request
      * @return
      */
-    @Secured({ "ROLE_ADMIN" })
+    @Secured({"ROLE_ADMIN"})
     @PostMapping
-    @Operation(summary = "Crear usuario", description = "Crea un usuario y su información personal.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Crear usuario", description = "Crea un usuario y su información personal.")
     @ApiResponse(responseCode = "201", description = "Usuario creado correctamente")
-    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos",content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos", content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
     @ApiResponse(responseCode = "409", description = "La identificación ya existe")
     @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
     @ApiResponse(responseCode = "403", description = "El token no tiene ROLE_ADMIN")
@@ -146,9 +146,9 @@ public class UserController {
      * @param request
      * @return
      */
-    @Secured({ "ROLE_ADMIN" })
+    @Secured({"ROLE_ADMIN"})
     @PutMapping(path = "/{id}")
-    @Operation(summary = "Actualizar usuario", description = "Actualiza los datos del usuario indicado.", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Actualizar usuario", description = "Actualiza los datos del usuario indicado.")
     @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente")
     @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos", content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
     @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
@@ -169,9 +169,9 @@ public class UserController {
      * @param id
      * @return
      */
-    @Secured({ "ROLE_ADMIN" })
+    @Secured({"ROLE_ADMIN"})
     @DeleteMapping(path = "/{id}")
-    @Operation(summary = "Eliminar usuario", security = @SecurityRequirement(name = "bearerAuth"))
+    @Operation(summary = "Eliminar usuario")
     @ApiResponse(responseCode = "200", description = "Usuario eliminado correctamente")
     @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
