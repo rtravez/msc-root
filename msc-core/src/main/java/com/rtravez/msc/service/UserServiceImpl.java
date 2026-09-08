@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserResponse findUserByIdentification(String identification) throws ExceptionManager {
-        return userRepository.findUserByIdentification(Objects.requireNonNull(identification))
+        return userRepository.findUserByPersonIdentification(Objects.requireNonNull(identification))
                 .map(userMapper::toResponse)
                 .orElseThrow(() -> new ExceptionManager.NotFoundException("El usuario no existe"));
     }

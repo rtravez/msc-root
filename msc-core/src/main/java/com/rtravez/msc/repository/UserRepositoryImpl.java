@@ -41,7 +41,7 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<UserEntity, Long> imp
     }
 
     @Override
-    public Optional<UserEntity> findUserByIdentification(String identification) throws ExceptionManager {
+    public Optional<UserEntity> findUserByPersonIdentification(String identification) throws ExceptionManager {
         try {
             return Optional.ofNullable(queryFactory.selectFrom(userEntity)
                     .innerJoin(userEntity.person, personEntity)

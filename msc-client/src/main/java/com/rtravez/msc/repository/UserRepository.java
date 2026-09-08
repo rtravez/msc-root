@@ -9,7 +9,7 @@ import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 
 /**
- * <b> Description de la clase, interface o enumeration. </b>
+ * <b> Description de la clase, interface or enumeration. </b>
  *
  * @author renetravez
  * @version $1.0$
@@ -28,11 +28,11 @@ public interface UserRepository extends BaseRepository<UserEntity, Long> {
     /**
      * Find user by identification
      *
-     * @param request
+     * @param identification
      * @return
      * @throws ExceptionManager
      */
-    Optional<UserEntity> findUserByIdentification(String identification) throws ExceptionManager;
+    Optional<UserEntity> findUserByPersonIdentification(String identification) throws ExceptionManager;
 
     Page<UserEntity> findAllByStatusTrue(Pageable pageable) throws ExceptionManager;
 }
