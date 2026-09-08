@@ -13,8 +13,8 @@ public class SwaggerConfig {
 	@Bean
 	public OpenAPI apiOpenAPI() {
 		return new OpenAPI()
-				.info(new Info().title("User Service API")
-						.description("API para la gestión de usuarios y validaciones")
+				.info(new Info().title("Msc Service API")
+						.description("API para la administración de usuarios")
 						.version("1.0"))
 				.components(new Components().addSecuritySchemes("bearerAuth",
 						new SecurityScheme().type(SecurityScheme.Type.HTTP)

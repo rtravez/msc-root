@@ -1,5 +1,7 @@
 package com.rtravez.msc.controller;
 
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -123,7 +125,7 @@ public class UserController {
     @PostMapping
     @Operation(summary = "Crear usuario", description = "Crea un usuario y su información personal.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "201", description = "Usuario creado correctamente")
-    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
+    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos",content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
     @ApiResponse(responseCode = "409", description = "La identificación ya existe")
     @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
     @ApiResponse(responseCode = "403", description = "El token no tiene ROLE_ADMIN")
@@ -148,7 +150,7 @@ public class UserController {
     @PutMapping(path = "/{id}")
     @Operation(summary = "Actualizar usuario", description = "Actualiza los datos del usuario indicado.", security = @SecurityRequirement(name = "bearerAuth"))
     @ApiResponse(responseCode = "200", description = "Usuario actualizado correctamente")
-    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos")
+    @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos", content = @Content(schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
     @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     @ApiResponse(responseCode = "409", description = "Conflicto de integridad")
     @ApiResponse(responseCode = "401", description = "Token ausente o inválido")
