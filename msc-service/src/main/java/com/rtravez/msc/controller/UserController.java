@@ -80,8 +80,8 @@ public class UserController {
      * @return
      */
     @Secured({"ROLE_ADMIN"})
-    @GetMapping(params = "identification")
-    @Operation(summary = "Buscar usuario por identificación")
+    @GetMapping(path = "identification", params = "identification")
+    @Operation(summary = "Listar usuario por identificación",description = "Obtiene un usuario por su identificación")
     @ApiResponse(responseCode = "200", description = "Usuario encontrado")
     @ApiResponse(responseCode = "404", description = "Usuario no encontrado")
     @ApiResponse(responseCode = "401", description = "Token ausente o inválido")

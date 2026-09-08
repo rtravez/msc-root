@@ -32,6 +32,7 @@ public interface UserMapper {
     @Mapping(target = "telephone", source = "person.telephone")
     @Mapping(target = "gender", source = "person.gender")
     @Mapping(target = "age", source = "person.age")
+    @Mapping(target = "personId", source = "person.personId")
     UserResponse toResponse(UserEntity entity);
 
     /**
