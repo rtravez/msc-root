@@ -2,7 +2,6 @@ package com.rtravez.msc.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rtravez.msc.entity.common.BaseEntity;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
