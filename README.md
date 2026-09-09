@@ -1,4 +1,4 @@
-# MSC Users Service
+# MSC Service
 
 Microservicio Spring Boot para la gestión de usuarios y personas. El proyecto
 usa Java 21, Maven y PostgreSQL en ejecución normal.
