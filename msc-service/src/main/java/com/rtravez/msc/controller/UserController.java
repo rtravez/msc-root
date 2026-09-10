@@ -50,9 +50,12 @@ public class UserController {
     private final PersonService personService;
 
     /**
-     * Find user all
+     * Retrieves a paginated list of active users.
      *
-     * @return
+     * @param pageable the pagination and sorting information. Defaults to 20 records per page.
+     * @return a {@link ResponseEntity} containing a {@link BaseResponseDto} with the paginated list of {@link UserResponse}.
+     * The response includes status and message information. If no users are found, the response will contain a message
+     * indicating that there are no users.
      */
     @Secured({"ROLE_ADMIN"})
     @GetMapping
