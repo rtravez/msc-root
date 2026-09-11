@@ -69,12 +69,12 @@ public class UserController {
         Page<UserResponse> userResponses = userService.findUserAll(pageable);
         if (userResponses.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<Page<UserResponse>>builder()
-                    .code(HttpStatus.OK.value()).message("No existen usuarios").build());
+                    .status(HttpStatus.OK.value()).detail("No existen usuarios").build());
         }
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(BaseResponseDto.<Page<UserResponse>>builder().code(HttpStatus.OK.value())
-                        .data(userResponses).message("Usuarios encontrados con \u00E9xito").build());
+                .body(BaseResponseDto.<Page<UserResponse>>builder().status(HttpStatus.OK.value())
+                        .data(userResponses).detail("Usuarios encontrados con éxito").build());
     }
 
     /**
@@ -124,12 +124,12 @@ public class UserController {
     public ResponseEntity<BaseResponseDto<UserResponse>> save(@Valid @RequestBody UserRequest request) {
         if (Boolean.TRUE.equals(this.personService.exist(request.getIdentification()))) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(BaseResponseDto.<UserResponse>builder()
-                    .code(HttpStatus.CONFLICT.value()).message("El usuario ya existe").build());
+                    .status(HttpStatus.CONFLICT.value()).detail("El usuario ya existe").build());
         }
 
         UserResponse response = userService.save(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponseDto.<UserResponse>builder()
-                .code(HttpStatus.CREATED.value()).data(response).message("Usuario creado con \u00E9xito").build());
+                .status(HttpStatus.CREATED.value()).data(response).detail("Usuario creado con éxito").build());
     }
 
     /**
@@ -152,7 +152,7 @@ public class UserController {
             @Valid @RequestBody UserRequest request) {
         UserResponse response = userService.update(id, request);
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<UserResponse>builder()
-                .code(HttpStatus.OK.value()).data(response).message("Usuario actualizado con \u00E9xito").build());
+                .status(HttpStatus.OK.value()).data(response).detail("Usuario actualizado con éxito").build());
     }
 
     /**
@@ -171,11 +171,11 @@ public class UserController {
     public ResponseEntity<BaseResponseDto<Long>> deleteById(
             @Parameter(description = "Identificador del usuario", required = true, example = "1") @PathVariable Long id) {
         if (this.userService.deleteUserById(id) >= 1) {
-            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<Long>builder().code(HttpStatus.OK.value())
-                    .message("Usuario eliminado con \u00E9xito").build());
+            return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<Long>builder().status(HttpStatus.OK.value())
+                    .detail("Usuario eliminado con éxito").build());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<Long>builder()
-                    .code(HttpStatus.NOT_FOUND.value()).message("El usuario no existe").build());
+                    .status(HttpStatus.NOT_FOUND.value()).detail("El usuario no existe").build());
         }
     }
 
@@ -183,9 +183,9 @@ public class UserController {
     private ResponseEntity<BaseResponseDto<UserResponse>> getBaseResponseDtoResponseEntity(UserResponse response) {
         if (response == null || response.getUserId() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<UserResponse>builder()
-                    .code(HttpStatus.NOT_FOUND.value()).message("Usuario no encontrado").build());
+                    .status(HttpStatus.NOT_FOUND.value()).detail("Usuario no encontrado").build());
         }
-        return ResponseEntity.ok(BaseResponseDto.<UserResponse>builder().code(HttpStatus.OK.value()).data(response)
-                .message("Usuario encontrado con \u00E9xito").build());
+        return ResponseEntity.ok(BaseResponseDto.<UserResponse>builder().status(HttpStatus.OK.value()).data(response)
+                .detail("Usuario encontrado con éxito").build());
     }
 }
