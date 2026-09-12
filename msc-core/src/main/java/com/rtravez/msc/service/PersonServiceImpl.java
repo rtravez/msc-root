@@ -14,7 +14,6 @@ import com.rtravez.msc.mapper.PersonMapper;
 import com.rtravez.msc.repository.PersonRepositoryImpl;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * <b> Description de la class, interface o enumeration. </b>
@@ -23,7 +22,6 @@ import lombok.extern.slf4j.Slf4j;
  * @version $1.0$
  */
 @Service
-@Slf4j
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
@@ -32,12 +30,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public Boolean exist(String identification) throws ExceptionManager {
-        try {
-            return personRepository.exist(identification);
-        } catch (ExceptionManager e) {
-            log.error("exist: {0}", e);
-            throw new ExceptionManager.FindingException("Error al buscar el registro");
-        }
+        return personRepository.exist(identification);
     }
 
     @Override

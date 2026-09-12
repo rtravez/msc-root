@@ -17,9 +17,7 @@ import com.rtravez.msc.entity.UserEntity;
 import com.rtravez.msc.exception.ExceptionManager;
 
 import jakarta.persistence.EntityManager;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Repository
 public class UserRepositoryImpl extends BaseRepositoryImpl<UserEntity, Long> implements UserRepository {
     /**
@@ -31,51 +29,36 @@ public class UserRepositoryImpl extends BaseRepositoryImpl<UserEntity, Long> imp
 
     @Override
     public Optional<UserEntity> findUserByUsername(String username) throws ExceptionManager {
-        try {
-            return Optional.ofNullable(queryFactory.selectFrom(userEntity).innerJoin(userEntity.person, personEntity)
-                    .fetchJoin().where(userEntity.username.eq(username).and(userEntity.status.isTrue())).fetchFirst());
-        } catch (Exception e) {
-            log.error("findUserByUsername: ", e);
-            throw new ExceptionManager.FindingException("Error al buscar el registro");
-        }
+        return Optional.ofNullable(queryFactory.selectFrom(userEntity).innerJoin(userEntity.person, personEntity)
+                .fetchJoin().where(userEntity.username.eq(username).and(userEntity.status.isTrue())).fetchFirst());
     }
 
     @Override
     public Optional<UserEntity> findUserByPersonIdentification(String identification) throws ExceptionManager {
-        try {
-            return Optional.ofNullable(queryFactory.selectFrom(userEntity)
-                    .innerJoin(userEntity.person, personEntity)
-                    .fetchJoin()
-                    .where(userEntity.person.identification.eq(identification)
-                            .and(userEntity.status.isTrue()))
-                    .fetchFirst());
-        } catch (Exception e) {
-            log.error("findUserByIdentification: ", e);
-            throw new ExceptionManager.FindingException("Error al buscar el registro");
-        }
+        return Optional.ofNullable(queryFactory.selectFrom(userEntity)
+            .innerJoin(userEntity.person, personEntity)
+            .fetchJoin()
+            .where(userEntity.person.identification.eq(identification)
+                .and(userEntity.status.isTrue()))
+            .fetchFirst());
     }
 
     @Override
     public Page<UserEntity> findAllByStatusTrue(Pageable pageable) throws ExceptionManager {
-        try {
-            JPQLQuery<UserEntity> contentQuery = queryFactory.selectFrom(userEntity)
-                    .innerJoin(userEntity.person, personEntity)
-                    .fetchJoin()
-                    .where(userEntity.status.isTrue())
-                    .orderBy(userEntity.userId.asc())
-                    .offset(pageable.getOffset())
-                    .limit(pageable.getPageSize());
+        JPQLQuery<UserEntity> contentQuery = queryFactory.selectFrom(userEntity)
+            .innerJoin(userEntity.person, personEntity)
+            .fetchJoin()
+            .where(userEntity.status.isTrue())
+            .orderBy(userEntity.userId.asc())
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize());
 
-            List<UserEntity> content = contentQuery.fetch();
-            Long total = queryFactory.select(userEntity.userId.count())
-                    .from(userEntity)
-                    .where(userEntity.status.isTrue())
-                    .fetchOne();
+        List<UserEntity> content = contentQuery.fetch();
+        Long total = queryFactory.select(userEntity.userId.count())
+            .from(userEntity)
+            .where(userEntity.status.isTrue())
+            .fetchOne();
 
-            return new PageImpl<>(Objects.requireNonNull(content), pageable, total == null ? 0 : total);
-        } catch (Exception e) {
-            log.error("findAllByStatusTrue: ", e);
-            throw new ExceptionManager.FindingException("Error al buscar los registros");
-        }
+        return new PageImpl<>(Objects.requireNonNull(content), pageable, total == null ? 0 : total);
     }
 }

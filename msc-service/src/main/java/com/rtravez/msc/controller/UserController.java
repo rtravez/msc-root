@@ -16,12 +16,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -52,7 +52,7 @@ public class UserController {
     /**
      * Retrieves a paginated list of active users.
      *
-     * @param pageable the pagination and sorting information. Defaults to 20 records per page.
+     * @param pageable the pagination and sorting information. Defaults to 10 records per page.
      * @return a {@link ResponseEntity} containing a {@link BaseResponseDto} with the paginated list of {@link UserResponse}.
      * The response includes status and message information. If no users are found, the response will contain a message
      * indicating that there are no users.
@@ -64,8 +64,8 @@ public class UserController {
     @ApiResponse(responseCode = "401", description = "Token ausente o inválido", content = @Content)
     @ApiResponse(responseCode = "403", description = "El token no tiene ROLE_ADMIN", content = @Content)
     public ResponseEntity<BaseResponseDto<Page<UserResponse>>> findUserAll(
-            @Parameter(description = "Paginación y ordenamiento. Por defecto devuelve 20 registros por página.")
-            @PageableDefault(size = 20) Pageable pageable) {
+            @Parameter(description = "Paginación y ordenamiento. Por defecto devuelve 10 registros por página.")
+            @PageableDefault(size = 10) Pageable pageable) {
         Page<UserResponse> userResponses = userService.findUserAll(pageable);
         if (userResponses.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(BaseResponseDto.<Page<UserResponse>>builder()
@@ -179,7 +179,7 @@ public class UserController {
         }
     }
 
-    @NonNull
+    @NonNull 
     private ResponseEntity<BaseResponseDto<UserResponse>> getBaseResponseDtoResponseEntity(UserResponse response) {
         if (response == null || response.getUserId() == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(BaseResponseDto.<UserResponse>builder()
