@@ -28,6 +28,9 @@ public abstract class BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
+    protected BaseEntity() {
+    }
+
     @Column(name = "created_host", updatable = false, length = 50, nullable = false)
     protected String createdHost;
 

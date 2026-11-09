@@ -40,18 +40,18 @@ public final class ProjectUtil {
         boolean mOK = false;
         boolean esRuc = false;
         String cedula;
-        if (tipoDocumento.equals(PASAPORTE) && identificacion.length() > 3) {
+        if (PASAPORTE.equals(tipoDocumento) && identificacion.length() > 3) {
             mOK = true;
         } else if (isNotNumeric(identificacion)) {
             mOK = false;
-        } else if (tipoDocumento.equals(RUC) && (identificacion.length() != 13 || !identificacion.substring(10).equals("001"))) {
+        } else if (RUC.equals(tipoDocumento) && (identificacion.length() != 13 || !"001".equals(identificacion.substring(10)))) {
             mOK = false;
-        } else if (tipoDocumento.equals(CEDULA) && identificacion.length() != 10) {
+        } else if (CEDULA.equals(tipoDocumento) && identificacion.length() != 10) {
             mOK = false;
         } else {
             cedula = identificacion.substring(0, 10);
             int vec3 = Integer.parseInt(identificacion.substring(2, 3));
-            if ((vec3 >= 0 && vec3 <= 5) || tipoDocumento.equals(CEDULA)) {
+            if ((vec3 >= 0 && vec3 <= 5) || CEDULA.equals(tipoDocumento)) {
                 mOK = validaCedula(cedula);
 //                if (!mOK && tipoDocumento.equals(Constantes.RUC)) {
 //                    mOK = true;

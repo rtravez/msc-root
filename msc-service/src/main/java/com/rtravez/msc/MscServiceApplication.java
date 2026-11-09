@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Slf4j
 @Import({MscConfiguration.class})
+@SuppressWarnings("PMD.UseUtilityClass")
 public class MscServiceApplication {
 
     public static void main(String[] args) {

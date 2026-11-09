@@ -5,7 +5,6 @@ import com.rtravez.msc.exception.ExceptionManager;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.JPQLQuery;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityManager;

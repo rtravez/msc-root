@@ -21,12 +21,10 @@ import java.util.List;
 
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ExceptionManager.class)
     public ResponseEntity<ProblemDetail> handleExceptionManager(ExceptionManager ex) {
-        log.error("ExceptionManager error: ", ex);
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 
         if (ex instanceof ExceptionManager.NotFoundException) {
@@ -54,7 +52,6 @@ public class GlobalExceptionHandler {
                 })
                 .toList();
 
-        log.warn("Validation error in fields: {}", errors);
         return problemDetail(HttpStatus.BAD_REQUEST, "Error de validación en los campos", errors);
     }
 
@@ -68,14 +65,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<ProblemDetail> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
-        log.warn("Argument type mismatch: {}", ex.getMessage());
         return problemDetail(HttpStatus.BAD_REQUEST, "Error de validación en los campos",
                 List.of(ex.getName() + ": valor inválido para el tipo " + ex.getRequiredType()));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ProblemDetail> handleConstraintViolationException(ConstraintViolationException ex) {
-        log.error("Constraint violation error: ", ex);
         List<String> errors = ex.getConstraintViolations()
                 .stream()
                 .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage()).toList();
@@ -85,7 +80,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ProblemDetail> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        log.warn("Data integrity violation", ex);
         return problemDetail(HttpStatus.CONFLICT,
                 "Los datos violan una restricción de integridad");
     }
@@ -98,8 +92,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public ResponseEntity<ProblemDetail> handleAccessDeniedException(AccessDeniedException ex) {
-        log.warn("Access denied: {}", ex.getMessage());
-
         return problemDetail(HttpStatus.FORBIDDEN, "No tienes permisos para realizar esta operación");
     }
 
